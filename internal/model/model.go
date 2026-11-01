@@ -169,6 +169,13 @@ type Product struct {
 	// The public feed is cacheable for a short while; a bounded period
 	// is refused until that cache has drained.
 	FeedGatedAt *time.Time `json:"feed_gated_at,omitempty"`
+	// SDKManageActivations: when true, the public SDK answers
+	// POST /license/activations and lets POST /license/deactivate
+	// carry a target_identifier, so a shipped client can replace a
+	// lost device on its own (issue #34). Off by default: with it on,
+	// a leaked license key can free slots other devices hold, which
+	// is the product owner's call to make, not ours.
+	SDKManageActivations bool `bun:",notnull,default:false" json:"sdk_manage_activations"`
 
 	CreatedAt time.Time `bun:",nullzero,default:now()" json:"created_at"`
 }

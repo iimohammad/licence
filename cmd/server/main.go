@@ -429,10 +429,18 @@ func main() {
 	}
 	// Initialize thread-safe webhook secret with config value
 	stripeH.SetWebhookSecret(cfg.StripeWebhookSecret)
+	// The gateway seam (issue #53): every route and background job
+	// below talks to the interface, so PAYMENT_GATEWAY picks the
+	// backend and a second one can be added without touching them.
+	gateway, err := payment.NewGateway(cfg.PaymentGateway, stripeH)
+	if err != nil {
+		logger.Error("payment gateway", "error", err)
+		os.Exit(1)
+	}
 	expiryChecker := service.NewExpiryChecker(db, emailSvc, webhookSvc, logger)
 	if cfg.StripeSecretKey != "" {
-		expiryChecker.EndPastDueUpgrade = stripeH.EndPastDueUpgrade
-		expiryChecker.EndGraceExpiredUpgrade = stripeH.EndGraceExpiredUpgrade
+		expiryChecker.EndPastDueUpgrade = gateway.EndPastDueUpgrade
+		expiryChecker.EndGraceExpiredUpgrade = gateway.EndGraceExpiredUpgrade
 	}
 	meteredSyncer := service.NewMeteredBillingSyncer(db, logger)
 	adminH := handler.NewAdminHandler(db, webhookSvc, emailSvc, expiryChecker, meteredSyncer)
@@ -451,9 +459,9 @@ func main() {
 	// the SDK itself. Left nil without an API key, where the question
 	// cannot be put at all.
 	if cfg.StripeSecretKey != "" {
-		adminH.SubscriptionEnded = stripeH.SubscriptionEnded
-		adminH.CancelSubscription = stripeH.CancelForAdmin
-		adminH.FollowSubscription = stripeH.FollowSubscription
+		adminH.SubscriptionEnded = gateway.SubscriptionEnded
+		adminH.CancelSubscription = gateway.CancelForAdmin
+		adminH.FollowSubscription = gateway.FollowSubscription
 	}
 	// Recorded across replicas and across restarts: links signed
 	// before this start keep the lifetime they were signed with, so
@@ -509,7 +517,7 @@ func main() {
 	// - No manual webhook secret override via env var
 	// - BASE_URL is not localhost (Stripe can't deliver to localhost)
 	if cfg.StripeSecretKey != "" && cfg.StripeWebhookSecret == "" && !payment.IsLocalhostURL(cfg.BaseURL) {
-		stripeH.SetupWebhookEndpoint(ctx)
+		gateway.SetupWebhookEndpoint(ctx)
 	}
 
 	go webhookSvc.StartRetryLoop(ctx, webhookRetryInterval)
@@ -558,7 +566,7 @@ func main() {
 		go func() {
 			// Unblock the reminders for subscriptions whose cancel state
 			// predates this release without waiting a tick.
-			stripeH.SyncCancelStates(ctx)
+			gateway.SyncCancelStates(ctx)
 			ticker := time.NewTicker(5 * time.Minute)
 			defer ticker.Stop()
 			for {
@@ -566,11 +574,11 @@ func main() {
 				case <-ctx.Done():
 					return
 				case <-ticker.C:
-					stripeH.SyncRecentCheckouts(ctx)
-					stripeH.SyncPendingCheckouts(ctx)
-					stripeH.RetireReplacedEndpoint(ctx)
-					stripeH.SyncCancelStates(ctx)
-					stripeH.SyncLapsedTermHolds(ctx)
+					gateway.SyncRecentCheckouts(ctx)
+					gateway.SyncPendingCheckouts(ctx)
+					gateway.RetireReplacedEndpoint(ctx)
+					gateway.SyncCancelStates(ctx)
+					gateway.SyncLapsedTermHolds(ctx)
 				}
 			}
 		}()
@@ -812,6 +820,9 @@ func main() {
 		// Read / pure-status endpoints — no idempotency layer needed.
 		lic.POST("/verify", licenseH.Verify)
 		lic.POST("/deactivate", licenseH.Deactivate)
+		// Device roster for a shipped client (issue #34), opt-in per
+		// product; deactivate also takes a target_identifier there.
+		lic.POST("/activations", licenseH.ListActivations)
 		lic.POST("/entitlements", entitlementH.Check)
 		lic.POST("/usage/status", usageH.GetQuotaStatus)
 		lic.POST("/floating/checkin", floatingH.CheckIn)
@@ -894,17 +905,17 @@ func main() {
 		middleware.RateLimitByIPScoped("public_plans", cfg.RateLimitAPI, time.Minute),
 		publicPlansH.ListPlans)
 
-	v1.POST("/webhook/stripe", middleware.RateLimitByIPScoped("stripe_webhook", 60, time.Minute), stripeH.Webhook)
+	v1.POST("/webhook/stripe", middleware.RateLimitByIPScoped("stripe_webhook", 60, time.Minute), gateway.Webhook)
 	// Stripe verify is hit by every successful checkout return, so the
 	// limit is generous, but the endpoint must NOT be naked: each call
 	// proxies to Stripe's API and an attacker could otherwise force us
 	// to burn rate-budget against Stripe.
 	v1.GET("/checkout/verify",
 		middleware.RateLimitByIPScoped("checkout_verify", 60, time.Minute),
-		stripeH.VerifyCheckoutSession)
+		gateway.VerifyCheckoutSession)
 
 	// Unified checkout: GET /pay/:checkout_id → Stripe
-	r.GET("/pay/:checkout_id", stripeH.CheckoutByPlan)
+	r.GET("/pay/:checkout_id", gateway.CheckoutByPlan)
 
 	// Self sign-up for free plans (/pay sends those plans to the form).
 	// The code-sending step shares the login's buckets, so it cannot be
@@ -955,7 +966,7 @@ func main() {
 				Features []*model.Entitlement `json:"features"`
 			}
 			model.FillLimits(licenses...)
-			upgradable, err := stripeH.UpgradableLicenses(c, emailStr, licenses)
+			upgradable, err := gateway.UpgradableLicenses(c, emailStr, licenses)
 			if err != nil {
 				response.Internal(c, err)
 				return
@@ -1094,17 +1105,17 @@ func main() {
 		// Seats and plan changes, previewed first. Each call reads
 		// Stripe, so they have a bucket of their own.
 		subChangeLimit := middleware.RateLimitByIPScoped("subscription_change", 30, time.Minute)
-		portal.POST("/subscription/change-plan", subChangeLimit, stripeH.ChangePlan)
-		portal.POST("/subscription/preview", subChangeLimit, stripeH.PreviewSubscriptionChange)
-		portal.POST("/subscription/change", subChangeLimit, stripeH.ChangeSubscription)
-		portal.POST("/subscription/pending", subChangeLimit, stripeH.PendingSubscriptionChange)
-		portal.POST("/subscription/cancel", stripeH.CancelSubscription)
-		portal.POST("/subscription/billing-portal", stripeH.CreatePortalSession)
-		portal.GET("/subscription/invoices", stripeH.ListInvoices)
+		portal.POST("/subscription/change-plan", subChangeLimit, gateway.ChangePlan)
+		portal.POST("/subscription/preview", subChangeLimit, gateway.PreviewSubscriptionChange)
+		portal.POST("/subscription/change", subChangeLimit, gateway.ChangeSubscription)
+		portal.POST("/subscription/pending", subChangeLimit, gateway.PendingSubscriptionChange)
+		portal.POST("/subscription/cancel", gateway.CancelSubscription)
+		portal.POST("/subscription/billing-portal", gateway.CreatePortalSession)
+		portal.GET("/subscription/invoices", gateway.ListInvoices)
 		// Maintenance renewal for perpetual licenses: a one-time
 		// checkout that extends updates_until.
-		portal.POST("/updates/renew", stripeH.RenewUpdates)
-		portal.POST("/licenses/upgrade", stripeH.StartUpgrade)
+		portal.POST("/updates/renew", gateway.RenewUpdates)
+		portal.POST("/licenses/upgrade", gateway.StartUpgrade)
 	}
 
 	// Admin route layout: three groups under /admin, all sharing the

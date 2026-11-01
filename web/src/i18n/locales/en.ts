@@ -98,6 +98,9 @@ const en = {
   "products.downloadURL": "Download page (optional)",
   "products.downloadURLHint":
     "Your page where customers download the product. Shown as a Download button in license emails ({{.DownloadURL}}). Link to a page, not directly to a file.",
+  "products.sdkManage": "SDK device management",
+  "products.sdkManageHint":
+    "Let the license key list the license's devices and release one from your app (POST /license/activations, target_identifier on deactivate), so a customer can replace a lost device without the portal. A leaked key gains the same power — enable only if that trade-off is fine.",
   "products.updateSettings": "Update settings",
   "products.slug": "Slug",
   "products.licensePrefix": "License key prefix",
@@ -461,6 +464,12 @@ const en = {
   "settings.siteNameDesc": "The name displayed in the admin panel.",
   "settings.language": "Language",
   "settings.languageDesc": "Interface language.",
+  "settings.taxMode": "Tax",
+  "settings.taxModeDesc":
+    "How Stripe Checkout charges tax. Fixed uses the Tax Rates you created in Stripe; Automatic uses Stripe Tax (per-calculation fee). Both also require the billing address and collect tax IDs.",
+  "settings.taxOff": "Don't charge tax",
+  "settings.taxFixed": "Use my fixed tax rates",
+  "settings.taxAutomatic": "Calculate automatically (Stripe Tax)",
   "settings.brandColor": "Brand Color",
   "settings.brandColorDesc": "Primary color used throughout the interface. Leave empty for default.",
   "settings.logoUrl": "Custom Logo URL",

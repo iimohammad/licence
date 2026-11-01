@@ -117,33 +117,31 @@ func (s *LicenseService) Activate(ctx context.Context, in ActivateInput) (*Activ
 		return nil, err
 	}
 
-	// A device already activated with this key, or asked about with the
-	// licence's key, which manages every device, needs nothing more. A
-	// member's key on anyone else's device is decided under the lock
-	// below: refused, unless the device predates members' keys and so
-	// moves to them (see Store.ActivateForKey).
+	// Always through ActivateForKey so a concurrent release waits on the
+	// activation row lock. An unlocked FindActivation + signToken used
+	// to hand the released device a fresh offline token while another
+	// machine took the freed slot.
 	seatID := keySeatID(lic)
-	if existing, err := s.store.FindActivation(ctx, lic.ID, in.Identifier); err == nil && (seatID == "" || existing.SeatID == seatID) {
-		_ = s.store.TouchActivation(ctx, existing.ID)
-		middleware.LicenseActivations.WithLabelValues(lic.ProductID, "already_activated").Inc()
-		token, _, err := s.signToken(ctx, lic, in.Identifier)
-		if err != nil {
-			return nil, apperr.Internal(err)
-		}
-		return &ActivateResult{
-			Status: "already_activated", LicenseID: lic.ID,
-			Token: token,
-			Meta:  responseMeta(),
-		}, nil
-	}
-
 	max := s.maxActivations(lic)
 	act := &model.Activation{
 		LicenseID: lic.ID, Identifier: in.Identifier,
 		IdentifierType: in.IdentifierType, Label: in.Label,
 		IPAddress: in.IPAddress, SeatID: seatID,
 	}
-	if err := s.store.ActivateForKey(ctx, act, max, in.LicenseKey); err != nil {
+	err = s.store.ActivateForKey(ctx, act, max, in.LicenseKey)
+	if errors.Is(err, store.ErrAlreadyActivated) {
+		res, gone, aerr := s.finishAlreadyActivated(ctx, lic, in, act, seatID, err)
+		if aerr != nil {
+			return nil, aerr
+		}
+		if !gone {
+			return res, nil
+		}
+		// Released after the lock: compete for a free slot once.
+		act.ID = ""
+		err = s.store.ActivateForKey(ctx, act, max, in.LicenseKey)
+	}
+	if err != nil {
 		// The key was cleared after it was looked up: the member was
 		// removed, or the licence's key changed. Answered as a key
 		// that does not exist, which it now is.
@@ -154,29 +152,20 @@ func (s *LicenseService) Activate(ctx context.Context, in ActivateInput) (*Activ
 			return nil, apperr.Conflict("DEVICE_HELD",
 				"this device is activated with another key on this license; the license owner can remove it in the portal")
 		}
-		// The machine already held a slot. The read above missed it
-		// because it ran outside the transaction, so this is the same
-		// answer that read would have given: a repeat activation is
-		// the licence working, not a failure.
 		if errors.Is(err, store.ErrAlreadyActivated) {
-			_ = s.store.TouchActivation(ctx, act.ID)
-			if errors.Is(err, store.ErrDeviceMoved) {
-				s.store.Audit(ctx, &model.AuditLog{
-					Entity: "license", EntityID: lic.ID, Action: "device_moved_to_member",
-					ActorType: "sdk", IPAddress: in.IPAddress,
-					Changes: map[string]any{"identifier": in.Identifier, "seat_id": seatID},
-				})
+			res, gone, aerr := s.finishAlreadyActivated(ctx, lic, in, act, seatID, err)
+			if aerr != nil {
+				return nil, aerr
 			}
-			middleware.LicenseActivations.WithLabelValues(lic.ProductID, "already_activated").Inc()
-			token, _, terr := s.signToken(ctx, lic, in.Identifier)
-			if terr != nil {
-				return nil, apperr.Internal(terr)
+			if gone {
+				middleware.LicenseActivations.WithLabelValues(lic.ProductID, "failed").Inc()
+				count, _ := s.store.CountActivations(ctx, lic.ID)
+				return nil, apperr.WithDetails(
+					apperr.Conflict("ACTIVATION_LIMIT", "maximum activations reached"),
+					map[string]any{"max": max, "current": count},
+				)
 			}
-			return &ActivateResult{
-				Status: "already_activated", LicenseID: lic.ID,
-				Token: token,
-				Meta:  responseMeta(),
-			}, nil
+			return res, nil
 		}
 		if err.Error() == "activation limit reached" {
 			middleware.LicenseActivations.WithLabelValues(lic.ProductID, "failed").Inc()
@@ -220,6 +209,36 @@ func (s *LicenseService) Activate(ctx context.Context, in ActivateInput) (*Activ
 		Token: token,
 		Meta:  responseMeta(),
 	}, nil
+}
+
+// finishAlreadyActivated signs for a device ActivateForKey already
+// held under the lock. gone is true when a concurrent release removed
+// the row before the touch — the caller must not sign in that case.
+func (s *LicenseService) finishAlreadyActivated(ctx context.Context, lic *model.License, in ActivateInput, act *model.Activation, seatID string, activateErr error) (*ActivateResult, bool, error) {
+	touched, err := s.store.TouchActivation(ctx, act.ID)
+	if err != nil {
+		return nil, false, apperr.Internal(err)
+	}
+	if !touched {
+		return nil, true, nil
+	}
+	if errors.Is(activateErr, store.ErrDeviceMoved) {
+		s.store.Audit(ctx, &model.AuditLog{
+			Entity: "license", EntityID: lic.ID, Action: "device_moved_to_member",
+			ActorType: "sdk", IPAddress: in.IPAddress,
+			Changes: map[string]any{"identifier": in.Identifier, "seat_id": seatID},
+		})
+	}
+	middleware.LicenseActivations.WithLabelValues(lic.ProductID, "already_activated").Inc()
+	token, _, err := s.signToken(ctx, lic, in.Identifier)
+	if err != nil {
+		return nil, false, apperr.Internal(err)
+	}
+	return &ActivateResult{
+		Status: "already_activated", LicenseID: lic.ID,
+		Token: token,
+		Meta:  responseMeta(),
+	}, false, nil
 }
 
 // recordFailure files a failed attempt and reports the lockout when
@@ -345,7 +364,9 @@ func (s *LicenseService) Verify(ctx context.Context, in VerifyInput) (*VerifyRes
 		// oracle: 403 NOT_ACTIVATED tells the attacker a key is real.
 		return nil, licenseNotFound()
 	}
-	_ = s.store.TouchActivation(ctx, act.ID)
+	if _, err := s.store.TouchActivation(ctx, act.ID); err != nil {
+		return nil, apperr.Internal(err)
+	}
 
 	if s.failures != nil {
 		s.failures.RecordSuccess(middleware.FailureKeyIP(in.IPAddress))
@@ -397,8 +418,14 @@ func refuseFloating(lic *model.License) error {
 type DeactivateInput struct {
 	LicenseKey string
 	Identifier string
-	ProductID  string
-	IPAddress  string
+	// TargetIdentifier, when set and different from Identifier,
+	// releases another device's activation instead of the caller's
+	// own (issue #34: a client replaces a lost device without the
+	// customer opening the portal). Needs
+	// Product.SDKManageActivations; member keys may not use it.
+	TargetIdentifier string
+	ProductID        string
+	IPAddress        string
 }
 
 func (s *LicenseService) Deactivate(ctx context.Context, in DeactivateInput) error {
@@ -428,6 +455,47 @@ func (s *LicenseService) Deactivate(ctx context.Context, in DeactivateInput) err
 
 	if err := requireProductCapability(lic.Product, model.CapActivations, "device deactivation"); err != nil {
 		return err
+	}
+
+	// Targeted release of another device (issue #34): the licence's
+	// own key only, and only on products that opted in. A member's key
+	// must not be able to kick teammates' devices, and a key leaked
+	// from a product that never asked for this keeps today's reach.
+	if in.TargetIdentifier != "" && in.TargetIdentifier != in.Identifier {
+		if lic.Product == nil || !lic.Product.SDKManageActivations {
+			return apperr.New(403, "SDK_MANAGE_DISABLED",
+				"this product does not allow a license key to release other devices; the license owner can enable it on the product")
+		}
+		if lic.KeySeat != nil {
+			return apperr.New(403, "MEMBER_KEY_FORBIDDEN",
+				"a member key can only release its own devices")
+		}
+		target, err := s.store.FindActivation(ctx, lic.ID, in.TargetIdentifier)
+		if err != nil {
+			return licenseNotFound()
+		}
+		if err := s.store.DeleteActivation(ctx, target.ID); err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				return licenseNotFound()
+			}
+			return apperr.Internal(err)
+		}
+		if s.failures != nil {
+			s.failures.RecordSuccess(middleware.FailureKeyIP(in.IPAddress))
+		}
+		s.store.Audit(ctx, &model.AuditLog{
+			Entity: "license", EntityID: lic.ID, Action: "deactivated_other",
+			ActorType: "sdk", IPAddress: in.IPAddress,
+			Changes: map[string]any{"identifier": in.TargetIdentifier, "by_identifier": in.Identifier},
+		})
+		s.logger.Info("license device released by sdk", "license_id", lic.ID,
+			"identifier", in.TargetIdentifier, "by", in.Identifier)
+		if s.webhook != nil {
+			s.webhook.Dispatch(ctx, lic.ProductID, "license.deactivated", map[string]any{
+				"license_id": lic.ID, "identifier": in.TargetIdentifier, "released_by": in.Identifier,
+			})
+		}
+		return nil
 	}
 
 	act, err := s.store.FindActivation(ctx, lic.ID, in.Identifier)
@@ -470,6 +538,58 @@ func (s *LicenseService) Deactivate(ctx context.Context, in DeactivateInput) err
 	}
 
 	return nil
+}
+
+// ─── SDK device listing (issue #34) ───
+
+type ListActivationsInput struct {
+	LicenseKey string
+	ProductID  string
+	IPAddress  string
+}
+
+// ListDeviceActivations answers a shipped client's "which devices
+// hold this license" (issue #34). Opt-in per product for the same
+// reason as targeted deactivate: the list tells a leaked key exactly
+// what it could kick off. Failed lookups feed the brute-force guard
+// so the endpoint can't be walked as a key oracle.
+func (s *LicenseService) ListDeviceActivations(ctx context.Context, in ListActivationsInput) (*model.License, []*model.Activation, int, error) {
+	if s.failures != nil {
+		if blocked, retryAfter := s.failures.IsBlocked(middleware.FailureKeyIP(in.IPAddress)); blocked {
+			return nil, nil, 0, lockedOut(retryAfter)
+		}
+	}
+	lic, err := s.store.FindLicenseByKey(ctx, in.LicenseKey)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			if locked := s.recordFailure(in.IPAddress); locked != nil {
+				return nil, nil, 0, locked
+			}
+			return nil, nil, 0, licenseNotFound()
+		}
+		return nil, nil, 0, apperr.Internal(err)
+	}
+	if in.ProductID != "" && lic.ProductID != in.ProductID {
+		if locked := s.recordFailure(in.IPAddress); locked != nil {
+			return nil, nil, 0, locked
+		}
+		return nil, nil, 0, licenseNotFound()
+	}
+	if lic.Product == nil || !lic.Product.SDKManageActivations {
+		return nil, nil, 0, apperr.New(403, "SDK_MANAGE_DISABLED",
+			"this product does not allow a license key to list its devices; the license owner can enable it on the product")
+	}
+	rows, err := s.store.ListActivations(ctx, lic.ID)
+	if err != nil {
+		return nil, nil, 0, apperr.Internal(err)
+	}
+	if err := s.store.FillMemberEmails(ctx, rows); err != nil {
+		return nil, nil, 0, apperr.Internal(err)
+	}
+	if s.failures != nil {
+		s.failures.RecordSuccess(middleware.FailureKeyIP(in.IPAddress))
+	}
+	return lic, rows, s.maxActivations(lic), nil
 }
 
 // ─── Helpers ───

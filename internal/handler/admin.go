@@ -600,6 +600,9 @@ func (h *AdminHandler) CreateProduct(c *gin.Context) {
 		// the gate takes effect at once and no drain has to be waited
 		// out. Doing it later works too, and then it does.
 		FeedLicenseRequired bool `json:"feed_license_required"`
+		// SDKManageActivations: see UpdateProduct — lets the license
+		// key manage the licence's device activations (issue #34).
+		SDKManageActivations bool `json:"sdk_manage_activations"`
 		// DownloadURL: optional page for {{.DownloadURL}} in emails.
 		DownloadURL string `json:"download_url"`
 	}
@@ -643,7 +646,8 @@ func (h *AdminHandler) CreateProduct(c *gin.Context) {
 	}
 
 	p := &model.Product{Name: req.Name, Slug: req.Slug, Type: req.Type, FeedLicenseRequired: req.FeedLicenseRequired,
-		DownloadURL: req.DownloadURL, LicensePrefix: req.LicensePrefix}
+		SDKManageActivations: req.SDKManageActivations,
+		DownloadURL:          req.DownloadURL, LicensePrefix: req.LicensePrefix}
 	if err := h.Store.CreateProduct(c, p); err != nil {
 		if store.IsUniqueViolation(err) {
 			response.Err(c, http.StatusConflict, "DUPLICATE", "product slug already exists")
@@ -677,6 +681,7 @@ func (h *AdminHandler) UpdateProduct(c *gin.Context) {
 		MinimumSupportedVersion *string `json:"minimum_supported_version"`
 		MinimumSupportedMessage *string `json:"minimum_supported_message"`
 		RequireSigning          *bool   `json:"require_signing"`
+		SDKManageActivations    *bool   `json:"sdk_manage_activations"`
 		FeedLicenseRequired     *bool   `json:"feed_license_required"`
 		DownloadURL             *string `json:"download_url"`
 		LicensePrefix           *string `json:"license_prefix"`
@@ -801,6 +806,14 @@ func (h *AdminHandler) UpdateProduct(c *gin.Context) {
 	if req.RequireSigning != nil {
 		p.RequireSigning = *req.RequireSigning
 		cols = append(cols, "require_signing")
+	}
+	// Issue #34: opt-in that lets a license key list a licence's
+	// devices and release one that is not its own, so a shipped app
+	// can replace a lost device without the customer visiting the
+	// portal. Widens what a leaked key can do — the owner's call.
+	if req.SDKManageActivations != nil {
+		p.SDKManageActivations = *req.SDKManageActivations
+		cols = append(cols, "sdk_manage_activations")
 	}
 	if req.DownloadURL != nil {
 		v := strings.TrimSpace(*req.DownloadURL)
@@ -4736,6 +4749,7 @@ var settingsWritable = map[string]bool{
 	service.ReminderDaysSetting:        true,
 	"maintenance_features_enabled":     true,
 	"feed_url_ttl_bound":               true,
+	"stripe_tax_mode":                  true,
 	"email_template_license_created":   true,
 	"email_template_license_expiring":  true,
 	"email_template_updates_ending":    true,
@@ -4792,6 +4806,11 @@ var settingsSecret = map[string]bool{
 var settingsEnum = map[string][]string{
 	"signup_mode":    {"open", "licensed_only"},
 	"email_provider": {"smtp", "cloudflare"},
+	// Issue #48: off keeps every sale tax-free (today's behaviour);
+	// fixed attaches the account's active Stripe Tax Rates to each
+	// checkout line item; automatic turns on Stripe Tax. Both non-off
+	// modes also require the billing address and collect tax IDs.
+	"stripe_tax_mode": {"off", "fixed", "automatic"},
 }
 
 // settingsServerOwned lists keys the server writes for itself — the

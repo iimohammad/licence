@@ -4,101 +4,111 @@
 
 # Keygate
 
-**Open source software license management platform.**
+**پلتفرم متن‌باز مدیریت لایسنس نرم‌افزار.**
 
-The self-hosted alternative to Keygen, Cryptlex, and LicenseSpring.
+جایگزین میزبانی‌شده توسط خودتان برای Keygen، Cryptlex و LicenseSpring.
 
-[Website](https://keygate.app) · [Documentation](https://keygate.app/docs) · [Community](https://github.com/tabloy/keygate/discussions)
+این ریپو، فورک فارسی‌شده‌ی [Keygate](https://github.com/tabloy/keygate) است.
 
-[![License](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/tabloy/keygate?label=release&color=green)](https://github.com/tabloy/keygate/releases)
-[![Stars](https://img.shields.io/github/stars/tabloy/keygate?style=flat)](https://github.com/tabloy/keygate/stargazers)
-[![Sponsor](https://img.shields.io/badge/sponsor-❤-ff69b4)](https://ko-fi.com/alanisme)
+[وب‌سایت](https://keygate.app) · [مستندات](https://keygate.app/docs) · [جامعه](https://github.com/iimohammad/licence/discussions)
 
-**[English](README.md)** · **[简体中文](README.zh-CN.md)**
+[![لایسنس](https://img.shields.io/badge/license-AGPL%20v3-blue.svg)](LICENSE)
+[![انتشار](https://img.shields.io/github/v/release/iimohammad/licence?label=release&color=green)](https://github.com/iimohammad/licence/releases)
+[![ستاره‌ها](https://img.shields.io/github/stars/iimohammad/licence?style=flat)](https://github.com/iimohammad/licence/stargazers)
+[![حمایت](https://img.shields.io/badge/sponsor-❤-ff69b4)](https://ko-fi.com/alanisme)
+
+[English](README.en.md) · **فارسی** · [简体中文](README.zh-CN.md)
 
 <br />
 
-<img src="web/public/screenshot.png" width="800" alt="Keygate Dashboard" />
+<img src="web/public/screenshot.png" width="800" alt="داشبورد Keygate" />
 
 </div>
 
 <br />
 
-## Why Keygate?
+## چرا Keygate؟
 
-You've built great software. Now you need to decide who can use it, how they pay for it, and what features they get access to.
+نرم‌افزار خوبی ساخته‌اید. حالا باید تصمیم بگیرید چه کسانی بتوانند از آن استفاده کنند، چگونه بابت آن پرداخت کنند و به چه قابلیت‌هایی دسترسی پیدا کنند.
 
-Commercial license platforms charge per-seat, per-month, and your customer data lives on someone else's servers. Building your own takes months of engineering on activation logic, payment webhooks, quota tracking, and all the edge cases that come at 2 AM.
+پلتفرم‌های تجاری لایسنس به‌ازای هر جایگاه و هر ماه هزینه دریافت می‌کنند و داده‌های مشتریان شما روی سرورهای دیگران نگهداری می‌شود. ساختن نسخه اختصاصی خودتان، ماه‌ها کار مهندسی روی منطق فعال‌سازی، وب‌هوک‌های پرداخت، پیگیری سهمیه‌ها و همه حالت‌های خاصی که ساعت ۲ بامداد سراغ‌تان می‌آیند، لازم دارد.
 
-**Keygate is the middle ground.** A production-ready license server you deploy on your own infrastructure, connect to your own Stripe, and manage through a clean dashboard. It handles everything from activation to dunning — so you can focus on building your product.
+**Keygate نقطه میانی این دو است.** یک سرور لایسنس آماده اجرا در محیط عملیاتی که روی زیرساخت خودتان مستقر می‌کنید، به Stripe خودتان وصل می‌کنید و از طریق یک داشبورد تمیز مدیریت می‌کنید. همه‌چیز — از فعال‌سازی تا پیگیری پرداخت — را مدیریت می‌کند تا شما روی ساختن محصول‌تان تمرکز کنید.
 
-One server. One database. Full control. Free, forever.
+یک سرور. یک پایگاه‌داده. کنترل کامل. رایگان، برای همیشه.
 
 <br />
 
-## Who is it for?
+## برای چه کسانی است؟
 
 | | |
 |:---|:---|
-| **🧑‍💻 Indie Developers** — Selling a desktop app, CLI tool, or Electron app? Keygate handles license keys, activation limits, and trials so you can focus on shipping. | **🏢 SaaS Companies** — Managing subscription tiers with different feature sets? Define plans with entitlements, track usage, and let Stripe handle billing automatically. |
-| **🏭 Enterprise Vendors** — Need floating licenses for large teams? Concurrent seat checkout with heartbeat monitoring, perfect for shared-seat environments. | **⚡ API Providers** — Enforcing rate limits and usage quotas? Atomic quota enforcement tracks every call and warns customers before they hit limits. |
+| **🧑‍💻 توسعه‌دهندگان مستقل** — یک اپ دسکتاپ، ابزار CLI یا اپ Electron می‌فروشید؟ Keygate کلیدهای لایسنس، محدودیت‌های فعال‌سازی و نسخه‌های آزمایشی را مدیریت می‌کند تا شما روی انتشار تمرکز کنید. | **🏢 شرکت‌های SaaS** — پلن‌های اشتراکی با مجموعه‌قابلیت‌های متفاوت مدیریت می‌کنید؟ پلن‌ها را همراه با دسترسی‌ها (entitlements) تعریف کنید، مصرف را پیگیری کنید و صورت‌حساب را به‌طور خودکار به Stripe بسپارید. |
+| **🏭 فروشندگان سازمانی** — برای تیم‌های بزرگ به لایسنس شناور نیاز دارید؟ برداشتن هم‌زمان جایگاه‌ها (checkout) همراه با پایش heartbeat؛ مناسب محیط‌های با جایگاه مشترک. | **⚡ ارائه‌دهندگان API** — محدودیت نرخ و سهمیه مصرف را اعمال می‌کنید؟ اعمال اتمی سهمیه‌ها هر فراخوانی را ردیابی می‌کند و پیش از رسیدن مشتری به سقف، به او هشدار می‌دهد. |
 
 <br />
 
-## Features
+## قابلیت‌ها
 
-### 🔑 License Management
+### 🔑 مدیریت لایسنس
 
-Every model in one platform — **subscriptions**, **perpetual**, **perpetual with a maintenance period** (buy once, get a year of updates, renew from the portal), **trials**, and **floating** (concurrent) licenses. Create, activate, verify, suspend, reinstate, and revoke with full audit trail. Per-device or per-user activation limits with **atomic enforcement** (no double-counting under retry). Grace periods. License keys hashed with SHA-256, encrypted at rest. Signed tokens for offline verification. **`Idempotency-Key` header** support on writes — retries never duplicate.
+همه مدل‌ها در یک پلتفرم — **اشتراکی**، **دائمی**، **دائمی با دوره پشتیبانی** (یک بار بخرید، یک سال به‌روزرسانی بگیرید و از پورتال تمدید کنید)، **نسخه آزمایشی** و لایسنس‌های **شناور** (هم‌زمان). ایجاد، فعال‌سازی، تأیید، تعلیق، بازگردانی و ابطال، همراه با رد حسابرسی کامل. محدودیت فعال‌سازی به‌ازای هر دستگاه یا هر کاربر با **اعمال اتمی** (هیچ دوبارشمردنی هنگام تلاش مجدد رخ نمی‌دهد). دوره‌های مهلت (Grace Period). کلیدهای لایسنس با SHA-256 هش و در حالت ساکن رمزنگاری می‌شوند. توکن‌های امضاشده برای تأیید آفلاین. پشتیبانی از هدر **`Idempotency-Key`** در نوشتن‌ها — تلاش‌های مجدد هرگز تکراری ثبت نمی‌شوند.
 
-Public SDK endpoints (activate / verify / deactivate / usage / download) take `license_key` directly — no embedded API keys to leak from your binaries. Customers can self-serve activation slots from the portal (free up a lost laptop without a support ticket).
+نقاط انتهایی عمومی SDK (فعال‌سازی / تأیید / غیرفعال‌سازی / مصرف / دانلود) مستقیماً `license_key` را می‌گیرند — بدون هیچ کلید API تعبیه‌شده‌ای که از باینری‌های‌تان لو برود. مشتریان می‌توانند جایگاه‌های فعال‌سازی را خودشان از پورتال مدیریت کنند (آزادکردن یک لپ‌تاپ گم‌شده، بدون نیاز به تیکت پشتیبانی).
 
-### 🚀 Software Distribution
+#### فعال‌سازی استاندارد یا نشست شناور؟
 
-Ship signed updates to your installed clients. **Sparkle** (macOS), **Velopack** (Windows), and **Tauri** (cross-platform) updaters all consume the same release feed — one publish, every updater compatible. Per-platform binaries grouped under a single release, **atomic publish gate** (no half-uploaded releases ever leak), **yank** for instant rollback. Per-product **Ed25519 signing keys** with private keys encrypted at rest under AES-256-GCM + HKDF-derived subkeys. Server-side SHA-256 for integrity (never trust the client's hash). Stable feeds are public — your customers' auto-updater never breaks when a license rotates. Products sold with a maintenance period turn on `feed_license_required` — the updater then sends the license and only sees releases published inside the customer's update period, while the app itself keeps running either way. Per-product `minimum_supported_version` floor for forced upgrades.
+وقتی ممکن است یک دستگاه برای مدت نامشخصی آفلاین بماند، از فعال‌سازی استاندارد استفاده کنید. دستگاه جایگاه فعال‌سازی خود را نگه می‌دارد تا وقتی مشتری آن را در پورتال حذف کند. اگر دستگاهی گم شد، مشتری وارد می‌شود، بخش **دستگاه‌ها**ی لایسنس را باز می‌کند، فعال‌سازی قدیمی را حذف می‌کند و سپس دستگاه جایگزین را فعال می‌کند. API پورتال، فعال‌سازی‌ها را با `GET /portal/licenses/{license_key}/activations` فهرست می‌کند و هر کدام را با `DELETE /portal/licenses/{license_key}/activations/{activation_id}` حذف می‌کند.
 
-Object storage is S3-compatible — Cloudflare R2, AWS S3, MinIO, anything that speaks SigV4. Presigned URLs for direct browser upload (no proxying through Keygate), and license-gated short-TTL download URLs.
+وقتی جایگاه باید در اختیار هر دستگاهی باشد که همین حالا نرم‌افزار را استفاده می‌کند، از نشست شناور استفاده کنید. کلاینت یک نشست رزرو می‌کند، قبل از رسیدن `floating_timeout` پلن ضربان (heartbeat) می‌فرستد و هنگام خروج، تحویل می‌دهد. اگر دستگاهی بدون تحویل غیب شود، جایگاهش تا انقضای مهلت اشغال می‌ماند؛ دستگاه دیگری نمی‌تواند نشستِ زنده را بگیرد. همین بازیابی مبتنی بر مهلت، نشست شناور را برای اپ‌هایی که باید برای مدت نامشخصی آفلاین قابل استفاده بمانند انتخاب نامناسبی می‌کند.
 
-### 📊 Usage Metering
+جزئیات درخواست و پاسخ این مسیرها در [مشخصات API](docs/openapi.yaml) آمده است.
 
-Track API calls, storage, bandwidth, or any custom metric. Quotas enforced **atomically at the database level** — even under high concurrency, limits are never exceeded. Hourly, daily, monthly, or yearly cycles with automatic reset. Threshold warnings via webhooks.
+### 🚀 توزیع نرم‌افزار
 
-### 💳 Payments
+به‌روزرسانی‌های امضاشده را برای کلاینت‌های نصب‌شده ارسال کنید. به‌روزرسان‌های **Sparkle** (macOS)، **Velopack** (ویندوز) و **Tauri** (چندسکویی) همگی از یک فید انتشار مشترک تغذیه می‌کنند — یک بار منتشر کنید، با همه به‌روزرسان‌ها سازگار است. باینری‌های هر پلتفرم زیر یک انتشار واحد گروه‌بندی می‌شوند، **دروازه انتشار اتمی** (هیچ انتشار نیمه‌بارگذاری‌شده‌ای هرگز لو نمی‌رود) و **yank** برای بازگشت فوری. **کلیدهای امضای Ed25519** به‌ازای هر محصول، با کلیدهای خصوصیِ رمزنگاری‌شده در حالت ساکن با AES-256-GCM + زیرکلیدهای مشتق‌شده با HKDF. SHA-256 سمت سرور برای صحت‌سنجی (هرگز به هش کلاینت اعتماد نکنید). فیدهای پایدار عمومی‌اند — به‌روزرسان خودکار مشتریان‌تان هرگز با چرخش لایسنس از کار نمی‌افتد. محصولاتی که با دوره پشتیبانی فروخته می‌شوند `feed_license_required` را فعال می‌کنند — در این حالت به‌روزرسان، لایسنس را ارسال می‌کند و فقط انتشار‌های داخل دوره به‌روزرسانی مشتری را می‌بیند؛ خودِ اپلیکیشن هم به هر حال به کار ادامه می‌دهد. کف نسخه `minimum_supported_version` به‌ازای هر محصول، برای ارتقاهای اجباری.
 
-Stripe integrated end-to-end with **three-layer reliability** — webhook, success-page verification, and periodic sync ensure no payment is ever missed. Customer pays → license created automatically. Payment fails → dunning emails on schedule. Supports checkout, plan upgrades with proration and downgrades that apply at once and are billed from the next invoice, cancellations, refunds, billing portal, and one-time renewals of a perpetual license's update period from the customer portal. Stripe webhook is auto-configured — just set your API key.
+ذخیره‌ساز شیء با S3 سازگار است — Cloudflare R2، AWS S3، MinIO و هر سرویسی که SigV4 بگوید. URLهای پیش‌امضاشده برای بارگذاری مستقیم از مرورگر (بدون عبور از Keygate) و URLهای دانلود کوتاه‌عمرِ گره‌خورده به لایسنس.
 
-Free plans can take **self sign-up**: the plan's `/pay` link becomes a form where a visitor confirms their email with a login code and gets a license key, one per address per product, with an optional daily cap and marketing-consent checkbox (reported in the `license.created` webhook). No card, no Stripe customer.
+### 📊 سنجش مصرف
 
-A license on a free plan shows **Upgrade** in the portal: the customer pays for a paid plan of the same product through checkout, and that same license moves to it — same key, same activations, no re-install. A full refund, or the end of the subscription, puts it back on the free plan instead of revoking it.
+فراخوانی‌های API، فضای ذخیره‌سازی، پهنای باند یا هر متریک سفارشی را پیگیری کنید. سهمیه‌ها **به‌صورت اتمی در سطح پایگاه‌داده** اعمال می‌شوند — حتی در هم‌زمانی بالا، هیچ سقفی نقض نمی‌شود. چرخه‌های ساعتی، روزانه، ماهانه یا سالانه با بازنشانی خودکار. هشدارهای آستانه از طریق وب‌هوک.
 
-A trial plan can name a free plan to fall back to: when a trial ends, the license moves to that plan instead of expiring, with the same key, and the trial ended email tells the customer which plan they carry on with. That plan's limits then apply: devices already activated keep working (a paused member's once they are back) but no new ones can be activated beyond its limit, and members beyond its seats are paused.
+### 💳 پرداخت‌ها
 
-### 👥 Seats & Entitlements
+Stripe سرتاسری و با **قابلیت اطمینان سه‌لایه** یکپارچه شده است — وب‌هوک، راستی‌آزمایی صفحه پرداخت موفق و همگام‌سازی دوره‌ای تضمین می‌کنند هیچ پرداختی از دست نمی‌رود. مشتری پرداخت می‌کند → لایسنس به‌طور خودکار ساخته می‌شود. پرداخت ناموفق باشد → ایمیل‌های پیگیری پرداخت طبق زمان‌بندی ارسال می‌شوند. از checkout، ارتقای پلن همراه با محاسبه نسبی (proration)، کاهش پلن که بلافاصله اعمال می‌شود و از فاکتور بعدی صورت‌حساب می‌گردد، لغو اشتراک، بازپرداخت، پورتال صورت‌حساب و تمدید یک‌باره دوره به‌روزرسانی لایسنس دائمی از پورتال مشتری پشتیبانی می‌شود. وب‌هوک Stripe خودکار پیکربندی می‌شود — کافی است کلید API خود را تنظیم کنید.
 
-A license holds a number of seats: set per plan, or sold per seat through Stripe, with customers adding or removing seats in the portal. The buyer owns the license and holds one seat, and invites members to the others; each member gets a license key of their own, and removing a member stops their key and frees their devices. If a license ends up with more people than seats (say a plan's seat limit is lowered), the members who joined last are paused until a seat is free. The license's own key stays fixed once issued; an admin reissues it when needed. Feature entitlements as boolean flags, numeric limits, or usage quotas. Purchasable add-ons that extend plan capabilities.
+پلن‌های رایگان می‌توانند **ثبت‌نام خودکار** داشته باشند: لینک `/pay` پلن به فرمی تبدیل می‌شود که بازدیدکننده در آن ایمیل خود را با یک کد ورود تأیید می‌کند و یک کلید لایسنس می‌گیرد — یکی به‌ازای هر نشانی برای هر محصول — همراه با سقف روزانه اختیاری و چک‌باکس رضایت دریافت ایمیل‌های بازاریابی (که در وب‌هوک `license.created` گزارش می‌شود). بدون کارت بانکی، بدون حساب مشتری در Stripe.
 
-### 🔧 Server-to-Server API
+لایسنسی که روی پلن رایگان است، در پورتال دکمه **ارتقا** را نشان می‌دهد: مشتری از طریق checkout هزینه پلن پولیِ همان محصول را می‌پردازد و همان لایسنس به آن منتقل می‌شود — همان کلید، همان فعال‌سازی‌ها، بدون نصب مجدد. بازپرداخت کامل یا پایان اشتراک، به‌جای ابطال لایسنس، آن را به پلن رایگان برمی‌گرداند.
 
-Programmatic admin access via `Authorization: Bearer kg_live_…` — mint licenses from your Stripe webhook, run nightly usage exports from cron, automate everything `/admin/*` can do. **Scope-based authorization** with fail-closed defaults (an API key with no scopes can do nothing). System-wide admin keys or per-product keys — same model as Stripe `sk_live_` and GitHub PATs.
+یک پلن آزمایشی می‌تواند یک پلن رایگان را به‌عنوان پلن جایگزین معرفی کند: وقتی نسخه آزمایشی تمام شود، لایسنس به‌جای منقضی‌شدن، با همان کلید به آن پلن منتقل می‌شود و ایمیل پایان نسخه آزمایشی به مشتری می‌گوید با کدام پلن ادامه می‌دهد. آن‌گاه محدودیت‌های همان پلن اعمال می‌شود: دستگاه‌های قبلاً فعال‌شده به کار ادامه می‌دهند (دستگاه‌های عضو متوقف‌شده نیز پس از بازگشتشان) اما فراتر از سقف آن هیچ دستگاه جدیدی را نمی‌توان فعال کرد و اعضای مازاد بر جایگاه‌های پلن متوقف می‌شوند.
 
-### 📈 Admin Dashboard
+### 👥 جایگاه‌ها و دسترسی‌ها
 
-Products, plans, licenses, customers, API keys, webhooks, analytics, audit logs, team management, email templates, and brand customization — all from one interface. Search, filter, and export (CSV/JSON).
+هر لایسنس تعدادی جایگاه دارد: یا در پلن تعیین می‌شود، یا به‌صورت تک‌جایگاهی از طریق Stripe فروخته می‌شود و مشتریان در پورتال جایگاه اضافه یا کم می‌کنند. خریدار مالک لایسنس است و یک جایگاه را خودش دارد و برای جایگاه‌های دیگر عضو دعوت می‌کند؛ هر عضو کلید لایسنس مخصوص خودش را می‌گیرد و حذف یک عضو، کلید او را متوقف و دستگاه‌هایش را آزاد می‌کند. اگر تعداد افراد لایسنس از جایگاه‌هایش بیشتر شود (مثلاً وقتی سقف جایگاه‌های یک پلن کاهش یابد)، اعضایی که آخرین بار ملحق شده‌اند تا آزادشدن یک جایگاه متوقف می‌شوند. کلید خودِ لایسنس پس از صدور ثابت می‌ماند؛ مدیر در صورت نیاز آن را از نو صادر می‌کند. دسترسی‌های قابلیتی (entitlements) به‌صورت پرچم بولی، محدودیت عددی یا سهمیه مصرف. افزونه‌های قابل خرید که قابلیت‌های پلن را گسترش می‌دهند.
 
-### 🛡️ Security
+### 🔧 API سرور به سرور
 
-Email OTP login with constant-time hash verification, role-based access checked per-request from database, brute-force protection, rate limiting, HMAC-signed webhooks, SameSite cookies, HSTS, and startup validation that rejects weak secrets. License verify endpoints collapse all "license-knowable" failures to a single 404 so `license_key` enumeration is closed off. Idempotency-Key middleware prevents double-execution on retried writes.
+دسترسی برنامه‌ای به بخش مدیریت با `Authorization: Bearer kg_live_…` — از وب‌هوک Stripe خود لایسنس صادر کنید، خروجی‌های مصرف شبانه را از cron اجرا کنید و هر کاری که `/admin/*` می‌تواند انجام دهد را خودکار کنید. **مجوزدهی مبتنی بر Scope** با پیش‌فرض fail-closed (کلید API بدون هیچ Scope‌ای هیچ کاری نمی‌تواند انجام دهد). کلیدهای مدیر سراسری یا کلیدهای به‌ازای هر محصول — همان الگوی Stripe `sk_live_` و توکن‌های دسترسی شخصی (PAT) گیت‌هاب.
 
-### 🌍 Self-Hosted
+### 📈 داشبورد مدیریت
 
-A Go server + PostgreSQL + (optional) S3-compatible storage for release artifacts. No Redis, no microservices. Auto-migration on startup. Setup wizard for first run. Custom branding, email templates, and i18n (English/Chinese/Persian built-in).
+محصولات، پلن‌ها، لایسنس‌ها، مشتریان، کلیدهای API، وب‌هوک‌ها، تحلیل‌ها، لاگ‌های حسابرسی، مدیریت تیم، قالب‌های ایمیل و سفارشی‌سازی برند — همه از یک رابط واحد. جست‌وجو، فیلتر و خروجی‌گیری (CSV/JSON).
+
+### 🛡️ امنیت
+
+ورود با کد یک‌بارمصرف (OTP) ایمیلی و مقایسه هش در زمان ثابت، کنترل دسترسی مبتنی بر نقش که درخواست‌به‌درخواست از پایگاه‌داده بررسی می‌شود، محافظت در برابر حملات brute-force، محدودیت نرخ (rate limiting)، وب‌هوک‌های امضاشده با HMAC، کوکی‌های SameSite، HSTS و اعتبارسنجی هنگام راه‌اندازی که رمزهای ضعیف را رد می‌کند. نقاط انتهایی تأیید لایسنس همه خطاهای «قابل‌حدس با دانستن لایسنس» را به یک 404 واحد فرومی‌کاهند تا امکان شمارش `license_key` بسته شود. میان‌افزار Idempotency-Key از اجرای دوباره نوشتن‌های تکراری جلوگیری می‌کند.
+
+### 🌍 میزبانی توسط خودتان
+
+یک سرور Go + PostgreSQL + (اختیاری) ذخیره‌ساز سازگار با S3 برای فایل‌های انتشار. بدون Redis و بدون میکروسرویس. مهاجرت خودکار پایگاه‌داده هنگام راه‌اندازی. جادوگر راه‌اندازی برای اولین اجرا. برندینگ سفارشی، قالب‌های ایمیل و i18n (انگلیسی، چینی و فارسی به‌صورت داخلی).
 
 <br />
 
-## Quick Start
+## شروع سریع
 
-### Docker (recommended)
+### Docker (پیشنهادی)
 
 ```bash
 # 1. Download
@@ -113,7 +123,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-### From source
+### از سورس‌کد
 
 ```bash
 git clone https://github.com/tabloy/keygate.git
@@ -121,78 +131,78 @@ cd keygate && cp .env.example .env
 make build && ./bin/keygate
 ```
 
-Open **http://localhost:9000** — the setup wizard guides you from there.
+**http://localhost:9000** را باز کنید — جادوگر راه‌اندازی از همان‌جا راهنمایی‌تان می‌کند.
 
-> 📖 Full docs, deployment guides, and SDK examples at **[keygate.app/docs](https://keygate.app/docs)**
+> 📖 مستندات کامل، راهنماهای استقرار و نمونه‌های SDK در **[keygate.app/docs](https://keygate.app/docs)**
 
 <br />
 
-## Compared to Alternatives
+## مقایسه با جایگزین‌ها
 
 | | **Keygate** | Keygen | Cryptlex | LicenseSpring |
 |:---|:---:|:---:|:---:|:---:|
-| Open source | **✅ AGPL v3** | Partial | ❌ | ❌ |
-| Self-hosted | **✅** | ✅ | ❌ | ❌ |
-| Price | **Free** | From $99/mo | From $249/mo | From $50/mo |
-| Floating licenses | ✅ | ✅ | ✅ | ✅ |
-| Usage metering | **✅** | ❌ | ❌ | ❌ |
-| Built-in payments | **✅** | ❌ | ❌ | ❌ |
-| Auto-update distribution | **✅ Sparkle / Velopack / Tauri** | ✅ Paid add-on | ❌ | ❌ |
-| Customer portal | ✅ | ❌ | ✅ | ✅ |
-| Admin dashboard | ✅ | ✅ | ✅ | ✅ |
-| Webhook system | ✅ | ✅ | ✅ | ✅ |
-| Audit trail | ✅ | ✅ | ❌ | ❌ |
+| متن‌باز | **✅ AGPL v3** | تا حدی | ❌ | ❌ |
+| میزبانی توسط خودتان | **✅** | ✅ | ❌ | ❌ |
+| قیمت | **رایگان** | از ۹۹ دلار در ماه | از ۲۴۹ دلار در ماه | از ۵۰ دلار در ماه |
+| لایسنس‌های شناور | ✅ | ✅ | ✅ | ✅ |
+| سنجش مصرف | **✅** | ❌ | ❌ | ❌ |
+| پرداخت داخلی | **✅** | ❌ | ❌ | ❌ |
+| توزیع به‌روزرسانی خودکار | **✅ Sparkle / Velopack / Tauri** | ✅ افزونه پولی | ❌ | ❌ |
+| پورتال مشتری | ✅ | ❌ | ✅ | ✅ |
+| داشبورد مدیریت | ✅ | ✅ | ✅ | ✅ |
+| سیستم وب‌هوک | ✅ | ✅ | ✅ | ✅ |
+| رد حسابرسی | ✅ | ✅ | ❌ | ❌ |
 | Idempotency-Key | **✅** | ❌ | ❌ | ❌ |
 | i18n | ✅ | ❌ | ❌ | ❌ |
 
 <br />
 
-## Community
+## جامعه کاربری
 
-- **[Discussions](https://github.com/tabloy/keygate/discussions)** — Questions, ideas, show & tell
-- **[Issues](https://github.com/tabloy/keygate/issues)** — Bug reports and feature requests
-- **[Blog](https://keygate.app/blog)** — Updates and engineering stories
-- **[Sponsor](https://keygate.app/sponsorships)** — Support the project
+- **[گفت‌وگوها](https://github.com/iimohammad/licence/discussions)** — پرسش‌ها، ایده‌ها و معرفی پروژه‌ها
+- **[ایشوها](https://github.com/iimohammad/licence/issues)** — گزارش باگ‌ها و درخواست قابلیت‌ها
+- **[وضعیت ایشوهای ریپوی اصلی در این فورک](docs/ISSUES-RESOLVED.md)** — چه ایشوهایی حل شدند و چگونه
+- **[وبلاگ](https://keygate.app/blog)** — به‌روزرسانی‌ها و داستان‌های مهندسی
+- **[حمایت مالی](https://keygate.app/sponsorships)** — از پروژه پشتیبانی کنید
 
-## Sponsors
+## حامیان
 
-Keygate is free and self-hosted. If it saves you the cost of a hosted licensing
-service, [sponsoring on Ko-fi](https://ko-fi.com/alanisme) keeps development going.
+Keygate رایگان و خودمیزبان است. اگر هزینه یک سرویس لایسنس ابری را برای‌تان حذف می‌کند، [حمایت مالی در Ko-fi](https://ko-fi.com/alanisme) ادامه توسعه را ممکن نگه می‌دارد.
 
 <!-- sponsors:start -->
-_Be the first._
+_اولین باشید._
 <!-- sponsors:end -->
 
-## Contributing
+## مشارکت در توسعه
 
-All contributions welcome — bugs, features, docs, translations. Check [open issues](https://github.com/tabloy/keygate/issues) or start a [discussion](https://github.com/tabloy/keygate/discussions), then submit a PR.
+از هر نوع مشارکتی استقبال می‌شود — باگ، قابلیت، مستندات و ترجمه. [ایشوهای باز](https://github.com/iimohammad/licence/issues) را ببینید یا یک [گفت‌وگو](https://github.com/iimohammad/licence/discussions) شروع کنید، سپس PR ارسال کنید.
 
-## Commercial License
+## لایسنس تجاری
 
-Using Keygate is free, commercially included. Run it for your own business, license the software you sell with it, or serve your own customers from it, and you owe nothing.
+استفاده از Keygate رایگان است، حتی به‌صورت تجاری. آن را برای کسب‌وکار خودتان اجرا کنید، نرم‌افزاری که می‌فروشید را با آن لایسنس کنید یا مشتریان خودتان را با آن سرویس دهید — هیچ هزینه‌ای بدهکار نمی‌شوید.
 
-The AGPL asks two things in return: the **"Powered by Keygate"** line stays visible in the interface, and if you modify Keygate and let others use it, your changes are published. A commercial license lifts both, which is what white labelling or reselling it as a closed service needs.
+AGPL در عوض دو چیز می‌خواهد: خط **«Powered by Keygate»** در رابط کاربری قابل مشاهده بماند، و اگر Keygate را تغییر دهید و در اختیار دیگران بگذارید، تغییرات‌تان منتشر شود. لایسنس تجاری هر دوی این‌ها را برمی‌دارد — همان چیزی که برای برندسازی با نام خودتان (White Label) یا فروش مجدد آن به‌صورت سرویس بسته لازم است.
 
-Contact [hello@keygate.app](mailto:hello@keygate.app).
+تماس: [hello@keygate.app](mailto:hello@keygate.app).
 
-## License
+## لایسنس
 
-[AGPL v3 License](LICENSE) with additional terms per [Section 7(b)](https://www.gnu.org/licenses/agpl-3.0.en.html#section7) — Copyright © 2026 [Tabloy](https://tabloy.app)
+[لایسنس AGPL v3](LICENSE) با شرایط اضافی مطابق [بند ۷(b)](https://www.gnu.org/licenses/agpl-3.0.en.html#section7) — Copyright © 2026 [Tabloy](https://tabloy.app)
 
-You are free to fork, modify, and self-host this software under the AGPL v3. The **"Powered by Keygate"** attribution in the UI must be preserved (see [NOTICE](NOTICE)).
+تحت AGPL v3 مجازید این نرم‌افزار را فورک کنید، تغییر دهید و خودتان میزبانی کنید. نشان **«Powered by Keygate»** در رابط کاربری باید حفظ شود (مطابق [NOTICE](NOTICE)).
 
-## Star History
+## تاریخچه ستاره‌ها
 
-<a href="https://star-history.com/#tabloy/keygate&Date">
+<a href="https://star-history.com/#iimohammad/licence&Date">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=tabloy/keygate&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=tabloy/keygate&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=tabloy/keygate&type=Date" width="600" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=iimohammad/licence&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=iimohammad/licence&type=Date" />
+   <img alt="نمودار تاریخچه ستاره‌ها" src="https://api.star-history.com/svg?repos=iimohammad/licence&type=Date" width="600" />
  </picture>
 </a>
 
 ---
 
 <div align="center">
-<sub>If Keygate helps your business, consider giving it a ⭐</sub>
+<sub>اگر Keygate به کسب‌وکارتان کمک می‌کند، دادن یک ⭐ به آن را در نظر بگیرید</sub>
 </div>

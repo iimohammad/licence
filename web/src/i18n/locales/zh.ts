@@ -97,6 +97,9 @@ const zh = {
   "products.downloadURL": "下载页面（可选）",
   "products.downloadURLHint":
     "客户下载本产品的页面。会在许可证邮件中显示为“下载”按钮（{{.DownloadURL}}）。请填页面地址，不要直接填文件链接。",
+  "products.sdkManage": "SDK 设备管理",
+  "products.sdkManageHint":
+    "允许许可证密钥列出许可证的设备并从应用内释放一个（POST /license/activations，deactivate 的 target_identifier），客户无需访问门户即可更换丢失的设备。泄露的密钥也将获得同样的能力——请确认可接受此权衡后再开启。",
   "products.updateSettings": "更新设置",
   "products.slug": "标识符",
   "products.licensePrefix": "许可证密钥前缀",
@@ -443,6 +446,12 @@ const zh = {
   "settings.siteNameDesc": "在管理面板中显示的名称。",
   "settings.language": "语言",
   "settings.languageDesc": "界面语言。",
+  "settings.taxMode": "税费",
+  "settings.taxModeDesc":
+    "Stripe 结账如何计税。「固定税率」使用你在 Stripe 创建的税率；「自动计算」使用 Stripe Tax（按次收费）。两者都会要求账单地址并收集税号。",
+  "settings.taxOff": "不收取税费",
+  "settings.taxFixed": "使用我的固定税率",
+  "settings.taxAutomatic": "自动计算（Stripe Tax）",
   "settings.brandColor": "品牌颜色",
   "settings.brandColorDesc": "整个界面使用的主色调。留空则使用默认紫色。",
   "settings.logoUrl": "自定义 Logo URL",

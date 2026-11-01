@@ -344,6 +344,7 @@ export const admin = {
     license_prefix?: string
     feed_license_required?: boolean
     download_url?: string
+    sdk_manage_activations?: boolean
   }) => post<Product>("/admin/products", data),
   updateProduct: (id: string, data: Partial<Product>) => put<Product>(`/admin/products/${id}`, data),
   deleteProduct: (id: string) => del(`/admin/products/${id}`),
@@ -754,6 +755,9 @@ export interface Product {
   feed_gated_at?: string
   /** Vendor's download page, used as {{.DownloadURL}} in emails. */
   download_url?: string
+  // The license's own key may list activations and release one of them
+  // (POST /license/activations, target_identifier on deactivate).
+  sdk_manage_activations?: boolean
   created_at: string
 }
 

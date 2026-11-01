@@ -534,6 +534,13 @@ paths:
                 identifier:
                   type: string
                   maxLength: 256
+                target_identifier:
+                  type: string
+                  maxLength: 256
+                  description: |
+                    Release this device instead of the caller's own.
+                    Requires the product's sdk_manage_activations flag
+                    and the license's own key (not a member key).
       responses:
         "200":
           description: Deactivated
@@ -550,11 +557,75 @@ paths:
         "400":
           description: "`BAD_REQUEST`: missing fields, blank or too long identifier"
           content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
+        "429":
+          $ref: "#/components/responses/LicenseThrottled"
+
+  /license/activations:
+    post:
+      tags: [License]
+      summary: List the license's activations
+      description: |
+        Lists the devices and users activated on the license, so an app
+        can offer device replacement without the portal: show this
+        list, then call `/license/deactivate` with `target_identifier`
+        to release the chosen device. Requires the product's
+        `sdk_manage_activations` flag and the license's own key (a
+        member's key answers as an unknown key would). An unknown key
+        counts as a failure for the brute force lockout (see the
+        top-level docs).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [license_key]
+              properties:
+                license_key:
+                  type: string
+      responses:
+        "200":
+          description: Activations, newest first
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean, example: true }
+                  data:
+                    type: object
+                    properties:
+                      license_id: { type: string, format: uuid }
+                      status: { type: string, example: active }
+                      max:
+                        type: integer
+                        description: The license's device limit (the plan's `max_activations`, times the seats bought on a plan sold per seat); 0 when there is none
+                      count:
+                        type: integer
+                        description: How many of the slots are in use
+                      activations:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id: { type: string, format: uuid }
+                            identifier: { type: string }
+                            identifier_type: { type: string, enum: [device, user] }
+                            label: { type: string }
+                            ip_address: { type: string }
+                            created_at: { type: string, format: date-time }
+                            last_verified: { type: string, format: date-time }
+                            seat_id:
+                              type: string
+                              description: The member whose own key activated the device; absent for the license's key
+                            member_email:
+                              type: string
+                              description: That member's address
+        "403":
+          description: "`SDK_MANAGE_DISABLED`: the product has not turned on `sdk_manage_activations`"
+          content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
         "404":
-          description: |
-            `LICENSE_NOT_FOUND`: one answer for a missing license or an
-            identifier with no activation (oracle hardening).
-            `FEATURE_NOT_AVAILABLE` for a key of a SaaS product.
+          description: "`LICENSE_NOT_FOUND`: unknown key, or a key that is not the license's own"
           content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } }
         "429":
           $ref: "#/components/responses/LicenseThrottled"

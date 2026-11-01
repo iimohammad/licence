@@ -109,6 +109,7 @@ const FORM_KEYS = [
   "site_name",
   "timezone",
   "signup_mode",
+  "stripe_tax_mode",
   "brand_color",
   "logo_url",
   "maintenance_features_enabled",
@@ -330,6 +331,20 @@ export default function SettingsPage() {
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-muted-foreground">{t("settings.languageDesc")}</p>
+                </div>
+                <div className="space-y-2">
+                  <Label>{t("settings.taxMode")}</Label>
+                  <Select value={form.stripe_tax_mode || "off"} onValueChange={(v) => set("stripe_tax_mode", v)}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="off">{t("settings.taxOff")}</SelectItem>
+                      <SelectItem value="fixed">{t("settings.taxFixed")}</SelectItem>
+                      <SelectItem value="automatic">{t("settings.taxAutomatic")}</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">{t("settings.taxModeDesc")}</p>
                 </div>
                 <div className="space-y-2">
                   <Label>{t("settings.brandColor")}</Label>

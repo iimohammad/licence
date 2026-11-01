@@ -119,6 +119,10 @@ func (h *LicenseHandler) Deactivate(c *gin.Context) {
 	var req struct {
 		LicenseKey string `json:"license_key" binding:"required"`
 		Identifier string `json:"identifier" binding:"required"`
+		// TargetIdentifier optionally releases another device than the
+		// caller's own (issue #34); needs the product's opt-in and the
+		// licence's own key.
+		TargetIdentifier string `json:"target_identifier"`
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		response.BadRequest(c, "license_key and identifier are required")
@@ -128,11 +132,42 @@ func (h *LicenseHandler) Deactivate(c *gin.Context) {
 	if req.Identifier, ok = cleanIdentifier(c, req.Identifier); !ok {
 		return
 	}
+	if req.TargetIdentifier != "" {
+		if req.TargetIdentifier, ok = cleanIdentifier(c, req.TargetIdentifier); !ok {
+			return
+		}
+	}
 
 	productID, _ := c.Get("product_id")
 	err := h.svc.Deactivate(c.Request.Context(), service.DeactivateInput{
+		LicenseKey:        req.LicenseKey,
+		Identifier:        req.Identifier,
+		TargetIdentifier:  req.TargetIdentifier,
+		ProductID:         str(productID),
+		IPAddress:         c.ClientIP(),
+	})
+	if err != nil {
+		writeAppErr(c, err)
+		return
+	}
+	response.OK(c, gin.H{"status": "deactivated"})
+}
+
+// ListActivations answers a shipped client's "which devices hold this
+// license" (issue #34): identifiers, labels and times, so an app can
+// offer "free the old laptop" at activation time. Opt-in per product —
+// POST /api/v1/license/activations {license_key}.
+func (h *LicenseHandler) ListActivations(c *gin.Context) {
+	var req struct {
+		LicenseKey string `json:"license_key" binding:"required"`
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.BadRequest(c, "license_key is required")
+		return
+	}
+	productID, _ := c.Get("product_id")
+	lic, rows, max, err := h.svc.ListDeviceActivations(c.Request.Context(), service.ListActivationsInput{
 		LicenseKey: req.LicenseKey,
-		Identifier: req.Identifier,
 		ProductID:  str(productID),
 		IPAddress:  c.ClientIP(),
 	})
@@ -140,7 +175,27 @@ func (h *LicenseHandler) Deactivate(c *gin.Context) {
 		writeAppErr(c, err)
 		return
 	}
-	response.OK(c, gin.H{"status": "deactivated"})
+	out := make([]portalActivationView, 0, len(rows))
+	for _, a := range rows {
+		out = append(out, portalActivationView{
+			ID:             a.ID,
+			Identifier:     a.Identifier,
+			IdentifierType: a.IdentifierType,
+			Label:          a.Label,
+			IPAddress:      a.IPAddress,
+			CreatedAt:      a.CreatedAt,
+			LastVerified:   a.LastVerified,
+			SeatID:         a.SeatID,
+			MemberEmail:    a.MemberEmail,
+		})
+	}
+	response.OK(c, gin.H{
+		"license_id": lic.ID,
+		"status":     lic.Status,
+		"max":        max,
+		"count":      len(out),
+		"activations": response.Array(out),
+	})
 }
 
 // writeAppErr translates an AppError into a consistent API response.

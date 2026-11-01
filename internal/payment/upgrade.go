@@ -306,6 +306,9 @@ func (h *StripeHandler) StartUpgrade(c *gin.Context) {
 			params.SubscriptionData = &stripe.CheckoutSessionSubscriptionDataParams{Metadata: tags}
 		}
 		params.Context = sctx
+		if err := h.applyTaxToSession(ctx, params); err != nil {
+			return fmt.Errorf("tax settings: %w", err)
+		}
 		sess, err := session.New(params)
 		if err != nil {
 			return fmt.Errorf("create checkout session: %w", err)

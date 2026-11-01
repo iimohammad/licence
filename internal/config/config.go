@@ -25,6 +25,11 @@ type Config struct {
 
 	StripeSecretKey     string
 	StripeWebhookSecret string
+	// PaymentGateway selects which backend moves money (issue #53):
+	// "stripe" is the only built-in one; payment.NewGateway fails the
+	// startup on any other name so a typo cannot quietly sell
+	// through nothing.
+	PaymentGateway string
 	// StripeLivemode tells the webhook handler which environment to
 	// trust. A mismatch between this flag and event.Livemode is a
 	// configuration error or a forged delivery; either way the
@@ -129,6 +134,7 @@ func Load() (*Config, error) {
 
 		StripeSecretKey:     os.Getenv("STRIPE_SECRET_KEY"),
 		StripeWebhookSecret: os.Getenv("STRIPE_WEBHOOK_SECRET"),
+		PaymentGateway:      os.Getenv("PAYMENT_GATEWAY"),
 	}
 
 	envVal, envSet := os.LookupEnv("STRIPE_LIVEMODE")

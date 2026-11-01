@@ -177,6 +177,11 @@ func (h *StripeHandler) CheckoutByPlan(c *gin.Context) {
 		metaUpdatesDays: strconv.Itoa(plan.UpdatesDays),
 		metaLicenseType: plan.LicenseType,
 	}
+	if err := h.applyTaxToSession(c.Request.Context(), params); err != nil {
+		slog.Error("stripe: tax settings failed", "plan_id", plan.ID, "error", err)
+		c.String(http.StatusServiceUnavailable, "checkout unavailable")
+		return
+	}
 
 	s, err := session.New(params)
 	if err != nil {
@@ -2963,6 +2968,12 @@ func (h *StripeHandler) RenewUpdates(c *gin.Context) {
 	// still be told apart from a purchase refund.
 	params.PaymentIntentData = &stripe.CheckoutSessionPaymentIntentDataParams{
 		Metadata: map[string]string{metaKind: kindRenewal, metaLicenseID: lic.ID},
+	}
+	if err := h.applyTaxToSession(c.Request.Context(), params); err != nil {
+		slog.Error("stripe renewal: tax settings failed", "license_id", lic.ID, "error", err)
+		response.Err(c, http.StatusServiceUnavailable, "RENEWAL_UNAVAILABLE",
+			"update renewals are temporarily unavailable; please try again later")
+		return
 	}
 	sess, err := session.New(params)
 	if err != nil {

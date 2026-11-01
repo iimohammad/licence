@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import { RELEASE_PRODUCT_TYPES, UpdateSettingsDialog } from "@/components/update-settings"
 import { useI18n } from "@/i18n"
 import { admin, type Product } from "@/lib/api"
@@ -277,6 +278,7 @@ function ProductDialog({
     type: string
     feed_license_required?: boolean
     download_url?: string
+    sdk_manage_activations?: boolean
   }) => void
   loading: boolean
   title: string
@@ -287,6 +289,7 @@ function ProductDialog({
   const [licensePrefix, setLicensePrefix] = useState(product?.license_prefix || "KG")
   const [type, setType] = useState(product?.type || "desktop")
   const [downloadURL, setDownloadURL] = useState(product?.download_url ?? "")
+  const [sdkManage, setSdkManage] = useState(product?.sdk_manage_activations ?? false)
 
   // Update settings live in Releases. The one exception is a saas
   // product becoming one that ships releases while a plan of it sells
@@ -309,6 +312,7 @@ function ProductDialog({
       license_prefix: licensePrefix,
       type,
       download_url: downloadURL.trim(),
+      sdk_manage_activations: sdkManage,
       ...(needsGate && { feed_license_required: true }),
     })
   }
@@ -405,6 +409,13 @@ function ProductDialog({
                 onChange={(e) => setDownloadURL(e.target.value)}
               />
               <p className="text-xs text-muted-foreground">{t("products.downloadURLHint")}</p>
+            </div>
+            <div className="flex items-center justify-between rounded-md border p-3">
+              <div className="space-y-0.5">
+                <Label htmlFor="product-sdk-manage">{t("products.sdkManage")}</Label>
+                <p className="text-xs text-muted-foreground">{t("products.sdkManageHint")}</p>
+              </div>
+              <Switch id="product-sdk-manage" checked={sdkManage} onCheckedChange={setSdkManage} />
             </div>
           </DialogBody>
           <DialogFooter>
