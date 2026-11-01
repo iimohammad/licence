@@ -1,0 +1,5 @@
+services:
+  keygate:
+    build: .
+    ports: !override
+      - "9090:9000"

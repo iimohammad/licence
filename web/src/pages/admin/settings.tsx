@@ -22,7 +22,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth } from "@/hooks/use-auth"
-import { useI18n } from "@/i18n"
+import { useI18n, type Locale } from "@/i18n"
 import { admin } from "@/lib/api"
 import EmailTemplatesManager from "@/pages/admin/email-templates"
 
@@ -319,13 +319,14 @@ export default function SettingsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>{t("settings.language")}</Label>
-                  <Select value={locale} onValueChange={(v) => setLocale(v as "en" | "zh")}>
+                  <Select value={locale} onValueChange={(v) => setLocale(v as Locale)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="en">English</SelectItem>
                       <SelectItem value="zh">中文</SelectItem>
+                      <SelectItem value="fa">فارسی</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-muted-foreground">{t("settings.languageDesc")}</p>

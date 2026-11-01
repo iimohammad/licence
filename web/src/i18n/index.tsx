@@ -1,12 +1,14 @@
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from "react"
 import en from "./locales/en"
 import zh from "./locales/zh"
+import fa from "./locales/fa"
 
-type Locale = "en" | "zh"
+type Locale = "en" | "zh" | "fa"
 type TranslationKeys = keyof typeof en
 type Translations = Record<TranslationKeys, string>
 
-const locales: Record<Locale, Translations> = { en, zh }
+const locales: Record<Locale, Translations> = { en, zh, fa }
+const rtlLocales: ReadonlySet<Locale> = new Set(["fa"])
 
 interface I18nContextType {
   locale: Locale
@@ -24,6 +26,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     if (saved && locales[saved]) return saved
     const browserLang = navigator.language.toLowerCase()
     if (browserLang.startsWith("zh")) return "zh"
+    if (browserLang.startsWith("fa") || browserLang.startsWith("persian")) return "fa"
     return "en"
   })
 
@@ -31,10 +34,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     setLocaleState(l)
     localStorage.setItem(STORAGE_KEY, l)
     document.documentElement.lang = l
+    document.documentElement.dir = rtlLocales.has(l) ? "rtl" : "ltr"
   }, [])
 
   useEffect(() => {
     document.documentElement.lang = locale
+    document.documentElement.dir = rtlLocales.has(locale) ? "rtl" : "ltr"
   }, [locale])
 
   const t = useCallback(
