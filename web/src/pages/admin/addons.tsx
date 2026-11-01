@@ -90,7 +90,7 @@ export default function AddonsPage() {
             <p className="text-muted-foreground mt-1 mb-4">{t("licenses.noProductsDesc")}</p>
             <Button asChild>
               <Link to="/admin/products">
-                <Plus className="h-4 w-4 mr-2" /> {t("products.new")}
+                <Plus className="h-4 w-4 me-2" /> {t("products.new")}
               </Link>
             </Button>
           </CardContent>
@@ -107,7 +107,7 @@ export default function AddonsPage() {
           <p className="text-muted-foreground">{t("addons.subtitle")}</p>
         </div>
         <Button onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4 mr-2" /> {t("addons.new")}
+          <Plus className="h-4 w-4 me-2" /> {t("addons.new")}
         </Button>
       </div>
 
@@ -137,7 +137,7 @@ export default function AddonsPage() {
                     <DataTableHead>{t("plans.value")}</DataTableHead>
                     <DataTableHead>{t("common.status")}</DataTableHead>
                     <DataTableHead>{t("common.created")}</DataTableHead>
-                    <DataTableHead className="w-24 text-right">{t("common.actions")}</DataTableHead>
+                    <DataTableHead className="w-24 text-end">{t("common.actions")}</DataTableHead>
                   </DataTableRow>
                 </DataTableHeader>
                 <DataTableBody>

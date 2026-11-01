@@ -503,15 +503,15 @@ function PreviewSummary({
       <div className="rounded-lg bg-muted/50 px-4 py-3 space-y-1">
         <div className="flex justify-between gap-3">
           <span className="text-muted-foreground">{t("portal.changeFrom")}</span>
-          <span className="font-medium text-right">{describe(p.current)}</span>
+          <span className="font-medium text-end">{describe(p.current)}</span>
         </div>
         <div className="flex justify-between gap-3">
           <span className="text-muted-foreground">{t("portal.changeTo")}</span>
-          <span className="font-medium text-right">{describe(p.target)}</span>
+          <span className="font-medium text-end">{describe(p.target)}</span>
         </div>
         <div className="flex justify-between gap-3">
           <span className="text-muted-foreground">{t("portal.changeIncludes")}</span>
-          <span className="text-right">
+          <span className="text-end">
             {limitsText(t, p.target.seat_limit, p.target.activation_limit, productType, floating)}
           </span>
         </div>

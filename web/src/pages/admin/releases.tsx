@@ -177,7 +177,7 @@ export default function ReleasesPage() {
             )}
             <Button asChild>
               <Link to="/admin/products">
-                <Plus className="h-4 w-4 mr-2" />{" "}
+                <Plus className="h-4 w-4 me-2" />{" "}
                 {hasAnyProducts ? t("releases.manageProducts") : t("releases.createProduct")}
               </Link>
             </Button>
@@ -196,10 +196,10 @@ export default function ReleasesPage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setSettings({ productId: productFilter, tab: "signing" })}>
-            <Settings2 className="h-4 w-4 mr-2" /> {t("releases.updateSettings")}
+            <Settings2 className="h-4 w-4 me-2" /> {t("releases.updateSettings")}
           </Button>
           <Button onClick={() => setCreating(true)}>
-            <Plus className="h-4 w-4 mr-2" /> {t("releases.newRelease")}
+            <Plus className="h-4 w-4 me-2" /> {t("releases.newRelease")}
           </Button>
         </div>
       </div>
@@ -246,7 +246,7 @@ export default function ReleasesPage() {
             <DataTableHead>{t("releases.platforms")}</DataTableHead>
             <DataTableHead>{t("common.status")}</DataTableHead>
             <DataTableHead>{t("common.created")}</DataTableHead>
-            <DataTableHead className="text-right">{t("common.actions")}</DataTableHead>
+            <DataTableHead className="text-end">{t("common.actions")}</DataTableHead>
           </DataTableRow>
         </DataTableHeader>
         <DataTableBody>
@@ -280,7 +280,7 @@ export default function ReleasesPage() {
                     {isBelowLatest && (
                       <Badge
                         variant="outline"
-                        className="ml-1.5 text-[10px] py-0 px-1.5 border-amber-500 text-amber-700"
+                        className="ms-1.5 text-[10px] py-0 px-1.5 border-amber-500 text-amber-700"
                         title={t("releases.belowLatestTitle", { latest: latestInBucket ?? "" })}
                       >
                         {t("releases.belowLatest")}
@@ -307,7 +307,7 @@ export default function ReleasesPage() {
                     <StatusBadge status={rel.status} yankedReason={rel.yanked_reason} />
                   </DataTableCell>
                   <DataTableCell className="text-sm text-muted-foreground">{formatDate(rel.created_at)}</DataTableCell>
-                  <DataTableCell className="text-right">
+                  <DataTableCell className="text-end">
                     <DropdownMenu>
                       {/* A row's actions depend on its status (publish a draft,
                         yank a published release, unyank a yanked one), so
@@ -325,7 +325,7 @@ export default function ReleasesPage() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => setOpenRelease(rel)}>
-                          <ChevronRight className="h-3.5 w-3.5 mr-2" /> {t("releases.viewArtifacts")}
+                          <ChevronRight className="h-3.5 w-3.5 me-2 rtl:rotate-180" /> {t("releases.viewArtifacts")}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {rel.status === "draft" && allReady && (
@@ -338,7 +338,7 @@ export default function ReleasesPage() {
                               }
                             }}
                           >
-                            <Rocket className="h-3.5 w-3.5 mr-2" /> {t("releases.publish")}
+                            <Rocket className="h-3.5 w-3.5 me-2" /> {t("releases.publish")}
                           </DropdownMenuItem>
                         )}
                         {rel.status === "draft" && !allReady && (
@@ -351,7 +351,7 @@ export default function ReleasesPage() {
                         )}
                         {rel.status === "published" && (
                           <DropdownMenuItem onClick={() => setYanking(rel)} className="text-destructive">
-                            <AlertTriangle className="h-3.5 w-3.5 mr-2" /> {t("releases.yank")}
+                            <AlertTriangle className="h-3.5 w-3.5 me-2" /> {t("releases.yank")}
                           </DropdownMenuItem>
                         )}
                         {rel.status === "yanked" && (
@@ -360,11 +360,11 @@ export default function ReleasesPage() {
                         <DropdownMenuSeparator />
                         {rel.status === "draft" ? (
                           <DropdownMenuItem className="text-destructive" onClick={() => setDeleting(rel)}>
-                            <Trash2 className="h-3.5 w-3.5 mr-2" /> {t("releases.deleteDraft")}
+                            <Trash2 className="h-3.5 w-3.5 me-2" /> {t("releases.deleteDraft")}
                           </DropdownMenuItem>
                         ) : (
                           <DropdownMenuItem disabled>
-                            <Trash2 className="h-3.5 w-3.5 mr-2" /> {t("releases.deleteYankInstead")}
+                            <Trash2 className="h-3.5 w-3.5 me-2" /> {t("releases.deleteYankInstead")}
                           </DropdownMenuItem>
                         )}
                       </DropdownMenuContent>
@@ -487,7 +487,7 @@ function StatusBadge({ status, yankedReason }: { status: string; yankedReason?: 
         : "bg-amber-100 text-amber-800"
   return (
     <Badge className={cls} title={yankedReason}>
-      {status === "yanked" && <AlertTriangle className="h-3 w-3 mr-1" />}
+      {status === "yanked" && <AlertTriangle className="h-3 w-3 me-1" />}
       {label}
     </Badge>
   )
@@ -628,7 +628,7 @@ function ReleaseDetailDialog({ release, onClose }: { release: Release; onClose: 
         <DialogHeader>
           <DialogTitle>
             {rel.product?.name || rel.product_id} {rel.version}
-            <Badge variant="outline" className="ml-2 capitalize text-xs">
+            <Badge variant="outline" className="ms-2 capitalize text-xs">
               {rel.channel}
             </Badge>
             <StatusBadge status={rel.status} />
@@ -665,7 +665,7 @@ function ReleaseDetailDialog({ release, onClose }: { release: Release; onClose: 
 
             {rel.status === "draft" && remainingPlatforms.length > 0 && (
               <Button onClick={() => setAdding(true)} variant="outline" className="w-full">
-                <Plus className="h-4 w-4 mr-2" />{" "}
+                <Plus className="h-4 w-4 me-2" />{" "}
                 {t("releases.addArtifactRemaining", { count: remainingPlatforms.length })}
               </Button>
             )}
@@ -868,7 +868,7 @@ function AddArtifactDialog({
               {t("common.cancel")}
             </Button>
             <Button onClick={handleSubmit} disabled={busy || !file || !platform}>
-              <Upload className="h-4 w-4 mr-2" />
+              <Upload className="h-4 w-4 me-2" />
               {busy ? t("releases.working") : t("releases.upload")}
             </Button>
           </div>

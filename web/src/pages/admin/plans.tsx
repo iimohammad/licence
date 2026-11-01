@@ -174,7 +174,7 @@ export default function PlansPage() {
             <p className="text-muted-foreground mt-1 mb-4">{t("licenses.noProductsDesc")}</p>
             <Button asChild>
               <Link to="/admin/products">
-                <Plus className="h-4 w-4 mr-2" /> {t("products.createTitle")}
+                <Plus className="h-4 w-4 me-2" /> {t("products.createTitle")}
               </Link>
             </Button>
           </CardContent>
@@ -191,7 +191,7 @@ export default function PlansPage() {
           <p className="text-muted-foreground">{t("plans.subtitle")}</p>
         </div>
         <Button onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4 mr-2" /> {t("plans.new")}
+          <Plus className="h-4 w-4 me-2" /> {t("plans.new")}
         </Button>
       </div>
 
@@ -228,7 +228,7 @@ export default function PlansPage() {
                     <DataTableHead>{t("plans.maxSeats")}</DataTableHead>
                     <DataTableHead>{t("common.status")}</DataTableHead>
                     <DataTableHead>{t("common.created")}</DataTableHead>
-                    <DataTableHead className="w-24 text-right">{t("common.actions")}</DataTableHead>
+                    <DataTableHead className="w-24 text-end">{t("common.actions")}</DataTableHead>
                   </DataTableRow>
                 </DataTableHeader>
                 <DataTableBody>
@@ -1052,7 +1052,7 @@ function EntitlementSection({ planId, entitlements: initial }: { planId: string;
       <div className="flex items-center justify-between">
         <h4 className="text-sm font-semibold">{t("plans.entitlements")}</h4>
         <Button type="button" variant="outline" size="sm" onClick={() => setAdding(!adding)}>
-          <Plus className="h-3 w-3 mr-1" /> {t("common.create")}
+          <Plus className="h-3 w-3 me-1" /> {t("common.create")}
         </Button>
       </div>
       {entitlements.length > 0 && (
@@ -1061,11 +1061,11 @@ function EntitlementSection({ planId, entitlements: initial }: { planId: string;
             <div key={e.id} className="flex items-center justify-between bg-muted/50 rounded px-3 py-2 text-sm">
               <div>
                 <span className="font-medium">{e.feature}</span>
-                <span className="text-muted-foreground ml-2">
+                <span className="text-muted-foreground ms-2">
                   ({e.value_type}: {e.value})
                 </span>
                 {e.quota_period && (
-                  <span className="text-muted-foreground ml-1">
+                  <span className="text-muted-foreground ms-1">
                     / {e.quota_period}
                     {e.quota_unit ? ` (${e.quota_unit})` : ""}
                   </span>

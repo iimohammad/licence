@@ -42,7 +42,7 @@ const DialogContent = React.forwardRef<
       {/* Pinned, because the panel itself never scrolls: what scrolls
           is DialogBody inside it. Before that, this button lived in
           the scrolling box and slid out of reach with the content. */}
-      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+      <DialogPrimitive.Close className="absolute end-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
         <X className="h-4 w-4" />
         <CloseLabel />
       </DialogPrimitive.Close>
@@ -52,7 +52,7 @@ const DialogContent = React.forwardRef<
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
 const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("shrink-0 flex flex-col space-y-1.5 text-center sm:text-left", className)} {...props} />
+  <div className={cn("shrink-0 flex flex-col space-y-1.5 text-center sm:text-start", className)} {...props} />
 )
 
 // DialogBody is the part of a dialog that scrolls. The title and the

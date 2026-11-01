@@ -208,7 +208,7 @@ export default function EmailTemplatesManager() {
                       <div>
                         <span className="text-sm font-medium">{meta.label}</span>
                         {isCustomized && (
-                          <Badge variant="secondary" className="ml-2 text-xs">
+                          <Badge variant="secondary" className="ms-2 text-xs">
                             customized
                           </Badge>
                         )}

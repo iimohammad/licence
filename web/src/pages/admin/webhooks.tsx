@@ -167,7 +167,7 @@ export default function WebhooksPage() {
             <p className="text-muted-foreground mt-1 mb-4">{t("webhooks.noProductsDesc")}</p>
             <Button asChild>
               <Link to="/admin/products">
-                <Plus className="h-4 w-4 mr-2" /> {t("products.createTitle")}
+                <Plus className="h-4 w-4 me-2" /> {t("products.createTitle")}
               </Link>
             </Button>
           </CardContent>
@@ -184,7 +184,7 @@ export default function WebhooksPage() {
           <p className="text-muted-foreground">{t("webhooks.subtitle")}</p>
         </div>
         <Button onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4 mr-2" /> {t("webhooks.new")}
+          <Plus className="h-4 w-4 me-2" /> {t("webhooks.new")}
         </Button>
       </div>
 
@@ -212,7 +212,7 @@ export default function WebhooksPage() {
                     <DataTableHead>{t("webhooks.events")}</DataTableHead>
                     <DataTableHead>{t("common.status")}</DataTableHead>
                     <DataTableHead>{t("common.created")}</DataTableHead>
-                    <DataTableHead className="w-40 text-right">{t("common.actions")}</DataTableHead>
+                    <DataTableHead className="w-40 text-end">{t("common.actions")}</DataTableHead>
                   </DataTableRow>
                 </DataTableHeader>
                 <DataTableBody>
@@ -540,14 +540,14 @@ function DeliveryLogDialog({ webhookId, onClose }: { webhookId: string; onClose:
                     <li>
                       <button
                         type="button"
-                        className="flex w-full flex-wrap items-center gap-x-3 gap-y-1.5 px-3 py-2.5 text-left hover:bg-muted/50"
+                        className="flex w-full flex-wrap items-center gap-x-3 gap-y-1.5 px-3 py-2.5 text-start hover:bg-muted/50"
                         aria-expanded={expandedId === d.id}
                         onClick={() => setExpandedId(expandedId === d.id ? null : d.id)}
                       >
                         {expandedId === d.id ? (
                           <ChevronDown className="h-4 w-4 shrink-0" />
                         ) : (
-                          <ChevronRight className="h-4 w-4 shrink-0" />
+                          <ChevronRight className="h-4 w-4 shrink-0 rtl:rotate-180" />
                         )}
                         <Badge variant="secondary" className="text-xs">
                           {d.event}
@@ -566,7 +566,7 @@ function DeliveryLogDialog({ webhookId, onClose }: { webhookId: string; onClose:
                         <span className="text-xs text-muted-foreground">
                           {t("webhooks.response")} {d.response_code ?? "-"} · {t("webhooks.attempts")} {d.attempts}
                         </span>
-                        <span className="ml-auto text-xs text-muted-foreground">{formatDate(d.delivered_at)}</span>
+                        <span className="ms-auto text-xs text-muted-foreground">{formatDate(d.delivered_at)}</span>
                       </button>
                       {expandedId === d.id && (
                         <div className="space-y-3 border-t bg-muted/20 px-3 py-3">
@@ -581,7 +581,7 @@ function DeliveryLogDialog({ webhookId, onClose }: { webhookId: string; onClose:
                               onClick={() => resendMut.mutate(d.id)}
                               disabled={resendMut.isPending}
                             >
-                              <RefreshCw className="h-3 w-3 mr-1" />
+                              <RefreshCw className="h-3 w-3 me-1" />
                               {resendMut.isPending && resendMut.variables === d.id
                                 ? t("common.loading")
                                 : t("webhooks.resend")}

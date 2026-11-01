@@ -67,7 +67,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           raised by a dialog was landing under that dialog's backdrop,
           dimmed and half-covered. */}
       {createPortal(
-        <div className="pointer-events-none fixed bottom-4 right-4 z-[100] flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2 sm:max-w-sm">
+        <div className="pointer-events-none fixed bottom-4 end-4 z-[100] flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2 sm:max-w-sm">
           {toasts.map((toast) => (
             <div
               key={toast.id}
@@ -83,7 +83,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 type="button"
                 onClick={() => dismiss(toast.id)}
                 aria-label={t("toast.dismiss")}
-                className="-mr-1 shrink-0 rounded px-1 leading-none opacity-60 transition-opacity hover:opacity-100"
+                className="-me-1 shrink-0 rounded px-1 leading-none opacity-60 transition-opacity hover:opacity-100"
               >
                 ×
               </button>

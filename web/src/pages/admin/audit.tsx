@@ -130,7 +130,7 @@ export default function AuditPage() {
                       </DataTableCell>
                       <DataTableCell>
                         <span className="font-medium">{log.entity}</span>
-                        <span className="text-muted-foreground text-xs ml-1 break-all">
+                        <span className="text-muted-foreground text-xs ms-1 break-all">
                           #{log.entity_id.substring(0, 8)}
                         </span>
                       </DataTableCell>
@@ -139,7 +139,7 @@ export default function AuditPage() {
                       </DataTableCell>
                       <DataTableCell className="text-muted-foreground text-xs">
                         {log.actor_type || "-"}
-                        {log.ip_address && <span className="ml-1">({log.ip_address})</span>}
+                        {log.ip_address && <span className="ms-1">({log.ip_address})</span>}
                       </DataTableCell>
                       <DataTableCell className="text-xs text-muted-foreground max-w-xs truncate">
                         {log.changes && Object.keys(log.changes).length > 0 ? JSON.stringify(log.changes) : "-"}

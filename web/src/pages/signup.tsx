@@ -149,7 +149,7 @@ export default function SignupPage() {
                 </Link>
               )}
               <Button type="submit" className="w-full" disabled={loading}>
-                <Mail className="h-4 w-4 mr-2" />
+                <Mail className="h-4 w-4 me-2" />
                 {loading ? t("login.sendingCode") : t("signup.sendCode")}
               </Button>
             </form>

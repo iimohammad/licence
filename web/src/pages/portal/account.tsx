@@ -61,7 +61,7 @@ export default function PortalAccountPage() {
           <CardTitle className="text-lg">{t("portal.profile")}</CardTitle>
           {!editing && (
             <Button variant="outline" size="sm" onClick={startEdit}>
-              <Pencil className="h-3.5 w-3.5 mr-1.5" />
+              <Pencil className="h-3.5 w-3.5 me-1.5" />
               {t("portal.editProfile")}
             </Button>
           )}
@@ -132,7 +132,7 @@ export default function PortalAccountPage() {
                   <>
                     <Shield className="h-3.5 w-3.5 text-primary" />
                     <span className="font-medium">{t("portal.administrator")}</span>
-                    <Badge variant="secondary" className="ml-1 text-xs">
+                    <Badge variant="secondary" className="ms-1 text-xs">
                       {user.role}
                     </Badge>
                   </>

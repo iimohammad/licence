@@ -112,7 +112,7 @@ export default function APIKeysPage() {
             <p className="text-muted-foreground mt-1 mb-4">{t("apiKeys.noProductsDesc")}</p>
             <Button asChild>
               <Link to="/admin/products">
-                <Plus className="h-4 w-4 mr-2" /> {t("products.createTitle")}
+                <Plus className="h-4 w-4 me-2" /> {t("products.createTitle")}
               </Link>
             </Button>
           </CardContent>
@@ -129,7 +129,7 @@ export default function APIKeysPage() {
           <p className="text-muted-foreground">{t("apiKeys.subtitle")}</p>
         </div>
         <Button onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4 mr-2" /> {t("apiKeys.new")}
+          <Plus className="h-4 w-4 me-2" /> {t("apiKeys.new")}
         </Button>
       </div>
 
@@ -156,7 +156,7 @@ export default function APIKeysPage() {
                   <DataTableHead>{t("apiKeys.prefix")}</DataTableHead>
                   <DataTableHead>{t("apiKeys.lastUsed")}</DataTableHead>
                   <DataTableHead>{t("common.created")}</DataTableHead>
-                  <DataTableHead className="w-24 text-right">{t("common.actions")}</DataTableHead>
+                  <DataTableHead className="w-24 text-end">{t("common.actions")}</DataTableHead>
                 </DataTableRow>
               </DataTableHeader>
               <DataTableBody>

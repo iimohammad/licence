@@ -109,13 +109,13 @@ export function SearchableSelect({
         {offList && (
           <SelectItem key={offList.id} value={offList.id}>
             {offList.label}
-            {offList.hint ? <span className="ml-2 text-xs text-muted-foreground">{offList.hint}</span> : null}
+            {offList.hint ? <span className="ms-2 text-xs text-muted-foreground">{offList.hint}</span> : null}
           </SelectItem>
         )}
         {options.map((o) => (
           <SelectItem key={o.id} value={o.id}>
             {o.label}
-            {o.hint ? <span className="ml-2 text-xs text-muted-foreground">{o.hint}</span> : null}
+            {o.hint ? <span className="ms-2 text-xs text-muted-foreground">{o.hint}</span> : null}
           </SelectItem>
         ))}
         {options.length === 0 && !loading && !offList && (

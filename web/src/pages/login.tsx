@@ -151,7 +151,7 @@ export default function LoginPage() {
               </div>
               {otpError && <p className="text-sm text-destructive">{otpError}</p>}
               <Button type="submit" className="w-full" disabled={otpLoading}>
-                <Mail className="h-4 w-4 mr-2" />
+                <Mail className="h-4 w-4 me-2" />
                 {otpLoading ? t("login.sendingCode") : t("login.sendCode")}
               </Button>
             </form>
@@ -223,7 +223,7 @@ export default function LoginPage() {
                 </div>
                 {devError && <p className="text-sm text-destructive">{devError}</p>}
                 <Button type="submit" className="w-full" disabled={devLoading}>
-                  <Terminal className="h-4 w-4 mr-2" />
+                  <Terminal className="h-4 w-4 me-2" />
                   {devLoading ? t("login.signingIn") : t("login.devLogin")}
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">{t("login.devNote")}</p>

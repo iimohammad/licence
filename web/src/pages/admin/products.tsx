@@ -95,13 +95,13 @@ export default function ProductsPage() {
           <p className="text-muted-foreground">{t("products.subtitle")}</p>
         </div>
         <Button onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4 mr-2" /> {t("products.new")}
+          <Plus className="h-4 w-4 me-2" /> {t("products.new")}
         </Button>
       </div>
 
       <div className="flex items-center gap-4">
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={t("common.search")}
             value={search}
@@ -109,7 +109,7 @@ export default function ProductsPage() {
               setSearch(e.target.value)
               pg.setPage(0)
             }}
-            className="pl-9"
+            className="ps-9"
           />
         </div>
       </div>
@@ -128,7 +128,7 @@ export default function ProductsPage() {
                     <DataTableHead>{t("products.licensePrefix")}</DataTableHead>
                     <DataTableHead>{t("common.type")}</DataTableHead>
                     <DataTableHead>{t("common.created")}</DataTableHead>
-                    <DataTableHead className="w-32 text-right">{t("common.actions")}</DataTableHead>
+                    <DataTableHead className="w-32 text-end">{t("common.actions")}</DataTableHead>
                   </DataTableRow>
                 </DataTableHeader>
                 <DataTableBody>
@@ -444,7 +444,7 @@ function ProductTypeCard({
       type="button"
       onClick={onSelect}
       className={
-        "flex flex-col items-start gap-2 rounded-md border p-3 text-left transition-colors " +
+        "flex flex-col items-start gap-2 rounded-md border p-3 text-start transition-colors " +
         (selected ? "border-primary ring-2 ring-primary bg-primary/5" : "border-input hover:bg-muted/40")
       }
     >

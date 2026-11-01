@@ -611,7 +611,7 @@ function RequiredUpdateSection({ product }: { product: Product }) {
                   ? t("updateSettings.previewTitleTo", { version: chosen, newest })
                   : t("updateSettings.previewTitle", { version: chosen })}
               </p>
-              <ul className="list-disc pl-4 text-muted-foreground space-y-0.5">
+              <ul className="list-disc ps-4 text-muted-foreground space-y-0.5">
                 <li>{t("updateSettings.previewSparkle")}</li>
                 <li>
                   {rich(t(message.trim() ? "updateSettings.previewTauriMessage" : "updateSettings.previewTauri"), {
@@ -671,7 +671,7 @@ function SigningKeysSection({ productId }: { productId: string }) {
             <p className="font-medium">{t("updateSettings.noKeyTitle")}</p>
             <p className="text-sm text-muted-foreground mb-4">{t("updateSettings.noKeyDesc")}</p>
             <Button onClick={() => generateMut.mutate()} disabled={generateMut.isPending}>
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="h-4 w-4 me-2" />
               {generateMut.isPending ? t("updateSettings.generating") : t("updateSettings.generateKey")}
             </Button>
           </CardContent>
@@ -692,7 +692,7 @@ function SigningKeysSection({ productId }: { productId: string }) {
             {history.map((k) => (
               <div key={k.id} className="bg-muted/50 rounded-md px-3 py-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <code className="truncate flex-1 mr-2">{k.public_key}</code>
+                  <code className="truncate flex-1 me-2">{k.public_key}</code>
                   <span className="text-muted-foreground shrink-0">
                     {t("updateSettings.rotatedOn", { date: k.rotated_at ? formatDate(k.rotated_at) : "—" })}
                   </span>
@@ -796,16 +796,16 @@ function ActiveSigningKeyCard({
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" asChild>
             <a href={admin.publicKeyURL(productId)} download="public_key.pem">
-              <Download className="h-3.5 w-3.5 mr-1.5" />
+              <Download className="h-3.5 w-3.5 me-1.5" />
               {t("updateSettings.downloadPem")}
             </a>
           </Button>
           <Button variant="outline" size="sm" onClick={onRotate}>
-            <RotateCw className="h-3.5 w-3.5 mr-1.5" />
+            <RotateCw className="h-3.5 w-3.5 me-1.5" />
             {t("updateSettings.rotate")}
           </Button>
           <Button variant="outline" size="sm" className="text-destructive" onClick={onDeactivate}>
-            <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+            <Trash2 className="h-3.5 w-3.5 me-1.5" />
             {t("updateSettings.deactivate")}
           </Button>
         </div>

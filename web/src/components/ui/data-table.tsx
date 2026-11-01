@@ -46,7 +46,7 @@ const DataTableHead = React.forwardRef<HTMLTableCellElement, React.ThHTMLAttribu
     <th
       ref={ref}
       className={cn(
-        "h-10 whitespace-nowrap px-3 text-left align-middle text-xs font-semibold uppercase tracking-wider text-muted-foreground [&:has([role=checkbox])]:pr-0",
+        "h-10 whitespace-nowrap px-3 text-start align-middle text-xs font-semibold uppercase tracking-wider text-muted-foreground [&:has([role=checkbox])]:pe-0",
         className,
       )}
       {...props}
@@ -82,13 +82,13 @@ function DataTableSortHead({
   return (
     <th
       aria-sort={active ? (sort.order === "asc" ? "ascending" : "descending") : "none"}
-      className={cn("h-10 p-0 text-left align-middle [&:has([role=checkbox])]:pr-0", className)}
+      className={cn("h-10 p-0 text-start align-middle [&:has([role=checkbox])]:pe-0", className)}
     >
       <button
         type="button"
         onClick={() => sort.toggle(column, firstOrder)}
         className={cn(
-          "group flex h-10 w-full items-center gap-1 whitespace-nowrap px-3 text-left text-xs font-semibold uppercase tracking-wider transition-colors",
+          "group flex h-10 w-full items-center gap-1 whitespace-nowrap px-3 text-start text-xs font-semibold uppercase tracking-wider transition-colors",
           active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
         )}
       >
@@ -111,7 +111,7 @@ const DataTableCell = React.forwardRef<HTMLTableCellElement, React.TdHTMLAttribu
   ({ className, ...props }, ref) => (
     <td
       ref={ref}
-      className={cn("px-3 py-2.5 align-middle text-sm [&:has([role=checkbox])]:pr-0", className)}
+      className={cn("px-3 py-2.5 align-middle text-sm [&:has([role=checkbox])]:pe-0", className)}
       {...props}
     />
   ),
@@ -190,7 +190,7 @@ function DataTablePagination({
 
       <div className="flex items-center justify-center gap-1 sm:justify-end">
         <Button variant="ghost" size="icon" className="h-7 w-7" disabled={page === 0} onClick={() => onPageChange(0)}>
-          <ChevronsLeft className="h-3.5 w-3.5" />
+          <ChevronsLeft className="h-3.5 w-3.5 rtl:rotate-180" />
         </Button>
         <Button
           variant="ghost"
@@ -199,7 +199,7 @@ function DataTablePagination({
           disabled={page === 0}
           onClick={() => onPageChange(page - 1)}
         >
-          <ChevronLeft className="h-3.5 w-3.5" />
+          <ChevronLeft className="h-3.5 w-3.5 rtl:rotate-180" />
         </Button>
 
         {/* A list of a thousand pages does not fit on a phone as
@@ -240,7 +240,7 @@ function DataTablePagination({
           disabled={page >= totalPages - 1}
           onClick={() => onPageChange(page + 1)}
         >
-          <ChevronRight className="h-3.5 w-3.5" />
+          <ChevronRight className="h-3.5 w-3.5 rtl:rotate-180" />
         </Button>
         <Button
           variant="ghost"
@@ -249,7 +249,7 @@ function DataTablePagination({
           disabled={page >= totalPages - 1}
           onClick={() => onPageChange(totalPages - 1)}
         >
-          <ChevronsRight className="h-3.5 w-3.5" />
+          <ChevronsRight className="h-3.5 w-3.5 rtl:rotate-180" />
         </Button>
       </div>
     </div>

@@ -130,14 +130,14 @@ export function AdminLayout() {
   // time a nav entry was added to one of them.
   const sidebar = (
     <>
-      {/* pr-11 below md leaves room for the drawer's close button,
+      {/* pe-11 below md leaves room for the drawer's close button,
         which sits at the panel's top right. The permanent sidebar is
         hidden below md, so the wider padding only ever applies inside
         the drawer. */}
-      <div className="p-4 pr-11 md:pr-4 flex items-center gap-2.5">
+      <div className="p-4 pe-11 md:pe-4 flex items-center gap-2.5">
         <img src={logo_url || "/logo.svg"} alt={site_name} className="h-7 w-7" />
         <span className="font-bold text-lg tracking-tight truncate">{site_name}</span>
-        <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded font-medium ml-auto shrink-0">
+        <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded font-medium ms-auto shrink-0">
           Admin
         </span>
       </div>
@@ -173,7 +173,7 @@ export function AdminLayout() {
                 {user.name?.charAt(0)?.toUpperCase() || user.email.charAt(0).toUpperCase()}
               </div>
               <span className="truncate text-sm">{user.name || user.email}</span>
-              <ChevronDown className="h-4 w-4 ml-auto opacity-50 shrink-0" />
+              <ChevronDown className="h-4 w-4 ms-auto opacity-50 shrink-0" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
@@ -184,7 +184,7 @@ export function AdminLayout() {
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout} className="text-destructive">
-              <LogOut className="h-4 w-4 mr-2" /> {t("nav.logout")}
+              <LogOut className="h-4 w-4 me-2" /> {t("nav.logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -208,7 +208,7 @@ export function AdminLayout() {
       {/* Sidebar — a column of its own from md up, and the contents of
         the drawer below it. 240px of a 390px phone is not a sidebar,
         it is the whole screen. */}
-      <aside className="hidden w-60 shrink-0 border-r bg-card md:flex md:flex-col">{sidebar}</aside>
+      <aside className="hidden w-60 shrink-0 border-e bg-card md:flex md:flex-col">{sidebar}</aside>
 
       {/* min-w-0 is what lets a wide table scroll inside this column
         instead of stretching it: a flex child's default min-width is
@@ -317,7 +317,7 @@ export function PortalLayout() {
                 <DropdownMenuItem className="text-xs text-muted-foreground">{user.email}</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={logout} className="text-destructive">
-                  <LogOut className="h-4 w-4 mr-2" /> {t("nav.logout")}
+                  <LogOut className="h-4 w-4 me-2" /> {t("nav.logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

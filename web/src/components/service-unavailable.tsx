@@ -31,7 +31,7 @@ export function ServiceUnavailableScreen({ onRetry }: { onRetry: () => Promise<v
             }
           }}
         >
-          <RefreshCw className={`mr-2 h-4 w-4 ${retrying ? "animate-spin" : ""}`} />
+          <RefreshCw className={`me-2 h-4 w-4 ${retrying ? "animate-spin" : ""}`} />
           {t("common.retry")}
         </Button>
       </div>

@@ -310,7 +310,7 @@ export default function SettingsPage() {
                       {TIMEZONES.map((tz) => (
                         <SelectItem key={tz.value} value={tz.value}>
                           <span className="font-mono text-xs">{tz.label}</span>
-                          <span className="ml-2 text-muted-foreground">{tz.city}</span>
+                          <span className="ms-2 text-muted-foreground">{tz.city}</span>
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -538,7 +538,7 @@ export default function SettingsPage() {
                   onClick={() => testEmailMut.mutate()}
                   disabled={testEmailMut.isPending || emailDirty || !data?.email?.configured}
                 >
-                  <Send className="h-4 w-4 mr-2" />
+                  <Send className="h-4 w-4 me-2" />
                   {t("settings.testEmail")}
                 </Button>
               </div>
@@ -586,7 +586,7 @@ export default function SettingsPage() {
                         {/* When the expiry reminders go out belongs with
                         their switch: editing it is pointless while off. */}
                         {kind === "license_expiring" && (
-                          <div className="ml-7">
+                          <div className="ms-7">
                             <ReminderDaysInput
                               value={form.expiry_reminder_days}
                               onChange={(v) => set("expiry_reminder_days", v)}
@@ -671,7 +671,7 @@ export default function SettingsPage() {
 
               <div className="flex items-center gap-3 pt-2">
                 <Button variant="outline" size="sm" onClick={() => recheckUpdate()} disabled={updateChecking}>
-                  <RefreshCw className={`h-4 w-4 mr-2 ${updateChecking ? "animate-spin" : ""}`} />
+                  <RefreshCw className={`h-4 w-4 me-2 ${updateChecking ? "animate-spin" : ""}`} />
                   {t("settings.checkUpdate")}
                 </Button>
 
@@ -685,7 +685,7 @@ export default function SettingsPage() {
                           href={updateData.release_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="underline font-medium ml-1"
+                          className="underline font-medium ms-1"
                         >
                           {t("settings.viewRelease")}
                         </a>
@@ -849,7 +849,7 @@ function TeamManagement() {
                 </Select>
               </div>
               <Button onClick={() => inviteMut.mutate()} disabled={!email || inviteMut.isPending}>
-                <UserPlus className="h-4 w-4 mr-2" />
+                <UserPlus className="h-4 w-4 me-2" />
                 {t("team.invite")}
               </Button>
             </div>

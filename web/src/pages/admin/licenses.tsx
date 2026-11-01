@@ -151,7 +151,7 @@ export default function LicensesPage() {
             <p className="text-muted-foreground mt-1 mb-4">{t("licenses.noProductsDesc")}</p>
             <Button asChild>
               <Link to="/admin/products">
-                <Plus className="h-4 w-4 mr-2" /> Create Product
+                <Plus className="h-4 w-4 me-2" /> Create Product
               </Link>
             </Button>
           </CardContent>
@@ -170,7 +170,7 @@ export default function LicensesPage() {
           </p>
         </div>
         <Button onClick={() => setCreating(true)}>
-          <Plus className="h-4 w-4 mr-2" /> {t("licenses.issue")}
+          <Plus className="h-4 w-4 me-2" /> {t("licenses.issue")}
         </Button>
       </div>
 
@@ -179,12 +179,12 @@ export default function LicensesPage() {
         being squeezed to a few characters. */}
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative w-full sm:w-auto sm:flex-1 sm:max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder={t("licenses.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
+            className="ps-9"
           />
         </div>
         {/* The two dropdowns share one row on a phone rather than
@@ -242,7 +242,7 @@ export default function LicensesPage() {
                     <DataTableSortHead sort={srt} column="created_at" firstOrder="desc">
                       {t("common.created")}
                     </DataTableSortHead>
-                    <DataTableHead className="w-16 text-right">{t("common.actions")}</DataTableHead>
+                    <DataTableHead className="w-16 text-end">{t("common.actions")}</DataTableHead>
                   </DataTableRow>
                 </DataTableHeader>
                 <DataTableBody>
@@ -283,7 +283,7 @@ export default function LicensesPage() {
                       <DataTableCell className="text-muted-foreground text-xs">
                         {formatDate(lic.created_at)}
                       </DataTableCell>
-                      <DataTableCell className="text-right">
+                      <DataTableCell className="text-end">
                         <Button
                           variant="ghost"
                           size="icon"
@@ -664,7 +664,7 @@ function LicenseDetail({ id, onClose }: { id: string; onClose: () => void }) {
               <TabsTrigger value="seats">{t("licenses.seats")}</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="info" className="-mr-6 min-h-0 flex-1 overflow-y-auto pr-6">
+            <TabsContent value="info" className="-me-6 min-h-0 flex-1 overflow-y-auto pe-6">
               <div className="space-y-6">
                 {/* Info */}
                 <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
@@ -854,7 +854,7 @@ function LicenseDetail({ id, onClose }: { id: string; onClose: () => void }) {
                           className="h-6 px-2 text-xs"
                           onClick={() => setConfirmUnlink(true)}
                         >
-                          <Unlink className="mr-1 h-3 w-3" />
+                          <Unlink className="me-1 h-3 w-3" />
                           {t("licenses.unlink")}
                         </Button>
                       </div>
@@ -917,7 +917,7 @@ function LicenseDetail({ id, onClose }: { id: string; onClose: () => void }) {
                         {/* Only a key that works is mailed; the server
                           refuses the rest. */}
                         <Button variant="outline" size="sm" disabled={resendMut.isPending || !lic.key_usable}>
-                          <Mail className="h-4 w-4 mr-1" /> {t("licenses.resendEmail")}
+                          <Mail className="h-4 w-4 me-1" /> {t("licenses.resendEmail")}
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -941,7 +941,7 @@ function LicenseDetail({ id, onClose }: { id: string; onClose: () => void }) {
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="outline" size="sm" disabled={suspendMut.isPending}>
-                          <Pause className="h-4 w-4 mr-1" /> {t("licenses.suspend")}
+                          <Pause className="h-4 w-4 me-1" /> {t("licenses.suspend")}
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -971,14 +971,14 @@ function LicenseDetail({ id, onClose }: { id: string; onClose: () => void }) {
                       onClick={() => reinstateMut.mutate()}
                       disabled={reinstateMut.isPending}
                     >
-                      <Play className="h-4 w-4 mr-1" /> {t("licenses.reinstate")}
+                      <Play className="h-4 w-4 me-1" /> {t("licenses.reinstate")}
                     </Button>
                   )}
                   {lic.status !== "revoked" && (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="destructive" size="sm" disabled={revokeMut.isPending}>
-                          <Ban className="h-4 w-4 mr-1" /> {t("licenses.revoke")}
+                          <Ban className="h-4 w-4 me-1" /> {t("licenses.revoke")}
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
@@ -1126,11 +1126,11 @@ function LicenseDetail({ id, onClose }: { id: string; onClose: () => void }) {
               </div>
             </TabsContent>
 
-            <TabsContent value="usage" className="-mr-6 min-h-0 flex-1 overflow-y-auto pr-6">
+            <TabsContent value="usage" className="-me-6 min-h-0 flex-1 overflow-y-auto pe-6">
               <UsageTab licenseId={id} />
             </TabsContent>
 
-            <TabsContent value="seats" className="-mr-6 min-h-0 flex-1 overflow-y-auto pr-6">
+            <TabsContent value="seats" className="-me-6 min-h-0 flex-1 overflow-y-auto pe-6">
               <SeatsTab
                 licenseId={id}
                 maxSeats={lic?.seat_limit ?? lic?.plan?.max_seats ?? 0}
@@ -1484,7 +1484,7 @@ function SeatsTab({
             <DataTableRow>
               <DataTableHead>{t("common.email")}</DataTableHead>
               <DataTableHead>{t("licenses.activations")}</DataTableHead>
-              <DataTableHead className="text-right">{t("common.actions")}</DataTableHead>
+              <DataTableHead className="text-end">{t("common.actions")}</DataTableHead>
             </DataTableRow>
           </DataTableHeader>
           <DataTableBody>
@@ -1565,7 +1565,7 @@ function SeatsTab({
                     )}
                   </DataTableCell>
                   <DataTableCell className="text-muted-foreground">{joined ? s.device_count : "-"}</DataTableCell>
-                  <DataTableCell className="text-right whitespace-nowrap">
+                  <DataTableCell className="text-end whitespace-nowrap">
                     {joined && (
                       <Button
                         variant="ghost"
